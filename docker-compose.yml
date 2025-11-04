@@ -11,3 +11,35 @@ services:
     volumes:
       - .:/app
     restart: unless-stopped
+    depends_on:
+      - postgres_db
+    networks:
+      - smart_factory_network
+
+  postgres_db:
+    container_name: postgres_db
+    image: postgres:${POSTGRES_DB_VERSION}
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_DB_EXTERNAL_PORT}:5432"
+    volumes:
+      - postgres_smart_factory_data:/var/lib/postgresql/data
+    networks:
+      - smart_factory_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB} && psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c \"SELECT 1;\"'"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  
+volumes:
+  postgres_smart_factory_data:
+
+networks:
+  smart_factory_network:
