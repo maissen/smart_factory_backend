@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     EXTERNAL_PORT: int = 8000
     HOST: str = "0.0.0.0"
 
+    # User config
+    USER_ALLOWED_ROLES: list = ['admin', 'client']
+
     # Database connection details
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
