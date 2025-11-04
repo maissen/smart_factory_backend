@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, CheckConstraint, func
-from src.core.postgres_config import Base
+from src.core.db_vars import Base
 from src.core.settings import settings
 
 class User(Base):

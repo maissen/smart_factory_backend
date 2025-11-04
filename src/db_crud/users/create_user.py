@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from src.models.user import User
+from src.models.user_model import User
 from src.core.settings import settings
 from src.helpers.auth import get_password_hash
 
