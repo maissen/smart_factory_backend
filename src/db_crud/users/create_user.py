@@ -4,14 +4,14 @@ from src.models.user_model import User
 from src.core.settings import settings
 from src.helpers.auth import get_password_hash
 
-def create_user(db: Session, username: str, email: str, password: str, role: str, phone_number: str) -> User:
+def create_user(db: Session, full_name: str, email: str, password: str, role: str, phone_number: str) -> User:
     if role not in settings.USER_ALLOWED_ROLES:
         raise ValueError(f"Role must be one of {settings.USER_ALLOWED_ROLES}")
 
     hashed_password = get_password_hash(password)
     
     new_user = User(
-        Full_name=username,
+        full_name=full_name,
         email=email,
         password_hash=hashed_password,
         role=role,

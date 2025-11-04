@@ -5,7 +5,7 @@ from src.core.settings import settings
 
 def update_user(db: Session, user_id: int, **kwargs) -> User:
     """
-    kwargs can include: Full_name, email, phone_number, role
+    kwargs can include: full_name, email, phone_number, role
     """
     user = db.query(User).filter(User.id == user_id).first()
     if not user:

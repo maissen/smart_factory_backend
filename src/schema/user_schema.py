@@ -6,7 +6,7 @@ from datetime import datetime
 # Base schema (optional fields)
 # -------------------------------
 class UserBase(BaseModel):
-    Full_name: Optional[str] = None
+    full_name: Optional[str] = None
     email: Optional[str] = None
     phone_number: Optional[str] = None
     role: Optional[str] = None
@@ -16,7 +16,7 @@ class UserBase(BaseModel):
 # Request schemas
 # -------------------------------
 class UserCreate(UserBase):
-    Full_name: str
+    full_name: str
     email: str
     password: str
     role: str
@@ -37,7 +37,7 @@ class PasswordUpdate(BaseModel):
 # -------------------------------
 class UserResponse(BaseModel):
     id: int
-    Full_name: str
+    full_name: str
     email: str
     role: str
     phone_number: str

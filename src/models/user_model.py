@@ -6,7 +6,7 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True, comment="Unique user ID")
-    Full_name = Column(String(100), unique=False, nullable=False, comment="User full name")
+    full_name = Column(String(20), unique=False, nullable=False, comment="User full name")
     email = Column(String(255), unique=True, nullable=False, index=True, comment="User email")
 
     password_hash = Column(Text, nullable=False, comment="Hashed password")

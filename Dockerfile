@@ -47,5 +47,5 @@ COPY . .
 # Expose the port that the application listens on.
 EXPOSE 8000
 
-# Run the application.
-CMD uvicorn 'src.main:app' --host="${HOST}" --port=8000 --reload
+# Create a startup script that runs migrations then starts the app
+CMD sh -c "alembic upgrade head && uvicorn 'src.main:app' --host=${HOST} --port=8000 --reload"
