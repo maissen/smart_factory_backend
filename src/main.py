@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from src.core.settings import settings
+from src.schema.user_schema import UserCreate
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
