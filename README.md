@@ -19,40 +19,41 @@ SmartFactory Portal is a comprehensive digital platform designed to streamline f
    ```
 
 2. **Environment Configuration**
-   - Copy `.env.example` to `.env`
-   - Configure database credentials and application settings
+   - Rename `.env.example` to `.env`
 
-3. **Docker Deployment**
+3. **Configure settings** in .env file
+
+4. **Docker Deployment**
    ```bash
    docker-compose up -d
    ```
 
-4. **Access the Application**
+5. **Access the Application**
    - API: `http://localhost:8000`
    - API Documentation: `http://localhost:8000/docs`
 
 ---
 
 ## Architecture
-
 ```
 backend/
-├── alembic/                    # Database migration management
-├── alembic.ini                 # Alembic configuration
-├── api_contracts/              # API specifications and contracts
-├── docker-compose.yml          # Container orchestration
-├── Dockerfile                  # Container image definition
-├── requirements.txt            # Python dependencies
+├── alembic/   # Database migrations
 │
-└── src/
-    ├── main.py                 # Application entry point
-    ├── core/
-    │   ├── postgres_config.py  # PostgreSQL database configuration
-    │   └── settings.py         # Application settings and environment config
-    │
-    └── models/
-        └── user_model.py       # User data model definition
+├── docs/   # Documentation
+├── src/
+│   ├── main.py       # App entry point
+│   ├── core/         # Config & settings
+│   └── models/       # Database models
+│
+├── docker-compose.yml
+├── Dockerfile
+└── requirements.txt
 ```
+
+**Documentation:**
+- Click [Architecture](docs/ARCHITECTURE.md) for Detailed project structure
+- Click [Database](docs/DATABASE.md) to learn How to add new tables & models to Postgres
+- Click [APIs](docs/api_contracts/) to learn How to use API endpoints
 
 ### Architecture Overview
 
@@ -62,79 +63,7 @@ backend/
 - **Migration Tool**: Alembic (database schema version control)
 - **Containerization**: Docker & Docker Compose (for consistent deployment)
 
-**Core Components:**
-
-1. **Application Core** (`src/core/`)
-   - `settings.py`: Centralizes application configuration, environment variables, and global settings
-   - `postgres_config.py`: Handles database connection setup, connection pooling, and PostgreSQL-specific configurations
-
-2. **Data Models** (`src/models/`)
-   - `user_model.py`: Defines the user entity structure including authentication and authorization attributes
-   - Built with SQLAlchemy ORM for database abstraction
-
-3. **Database Migrations** (`alembic/`)
-   - Version-controlled schema changes
-   - Ensures consistent database state across environments
-
-4. **API Contracts** (`api_contracts/`)
-   - Request/response schemas and validation rules
-
-5. **Application Entry** (`src/main.py`)
-   - FastAPI application initialization
-
 ---
-
-## Development Workflow
-
-### Adding New Database Models
-
-The project uses Alembic for database migrations with automatic model detection. Follow these steps to add a new model:
-
-1. **Create your model file**
-
-2. **Register the model in Alembic**
-   
-   Edit `alembic/env.py` and import your new model:
-   ```python
-   # alembic/env.py
-   # Import all models here so Alembic can detect them
-   from src.models.user_model import User
-   from src.models.new_model import My_model  # Add your new model
-   ```
-
-3. **Generate migration**
-   
-   Access the backend container:
-   ```bash
-   docker exec -it backend_api sh
-   ```
-   
-   Create an auto-generated migration:
-   ```bash
-   alembic revision --autogenerate -m "Create machine model"
-   ```
-
-4. **Review and apply migration**
-   
-   Check the generated migration file in `alembic/versions/`, then apply it:
-   ```bash
-   alembic upgrade head
-   ```
-
-5. **Exit container**
-   ```bash
-   exit
-   ```
-
-**Important Notes:**
-- Always import new models in `alembic/env.py` for Alembic to detect schema changes
-- Review auto-generated migrations before applying them
-- Use descriptive migration messages
-- Test migrations in development before production deployment
-
----
-
-
 
 ## 🤝 Contributing
 

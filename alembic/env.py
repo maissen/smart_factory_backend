@@ -16,7 +16,7 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from src.core.postgres_config import Base
+from src.core.db_vars import Base
 from src.core.settings import settings
 
 # Import all models here so Alembic can detect them
