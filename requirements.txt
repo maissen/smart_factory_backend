@@ -1,7 +1,6 @@
-fastapi
-uvicorn[standard]
-python-dotenv
-pydantic-settings
-sqlalchemy
-alembic
-asyncpg
+fastapi==0.121.0
+uvicorn[standard]==0.38.0
+pydantic-settings==2.11.0
+sqlalchemy==2.0.44
+alembic==1.17.1
+asyncpg==0.30.0
