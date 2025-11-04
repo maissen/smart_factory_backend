@@ -1,14 +1,22 @@
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from src.core.settings import settings
 
+# Synchronous engine
+# Replace asyncpg with psycopg2 for sync access
+engine = create_engine(settings.POSTGRES_DB_URL, echo=True)
 
-engine = create_async_engine(settings.POSTGRES_DB_URL, echo=True)
-AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+# Synchronous session maker
+SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
+# Base class for models
 Base = declarative_base()
 
 # Dependency for FastAPI routes
-async def get_db():
-    async with AsyncSessionLocal() as session:
-        yield session
+def get_db():
+    """Provide a synchronous DB session for dependency injection."""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
