@@ -1,0 +1,13 @@
+services:
+  app:
+    container_name: backend_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PYTHON_VERSION: ${PYTHON_VERSION}
+    ports:
+      - "${EXTERNAL_PORT}:8000"
+    volumes:
+      - .:/app
+    restart: unless-stopped
