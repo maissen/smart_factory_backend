@@ -1,63 +1,90 @@
+import re
+from src.exceptions.user_exceptions import (
+    InvalidEmailError,
+    InvalidPasswordError,
+    InvalidPhoneNumberError,
+    InvalidFullNameError
+)
+
+
+
+DEFAULT_ERROR_MESSAGE = "error message must be passed"
+
+
 def is_valid_str(value: str) -> bool:
     """
     Returns True if the given string is not None, not empty,
     and not just whitespace.
     """
-
     return isinstance(value, str) and value.strip() != ""
 
 
-def normalize_str(value: str) -> str:
+def normalize_str(value: str, error_msg: str = None) -> str:
     """
     Cleans a string by:
     - Stripping leading & trailing spaces
-    - Converting multiple spaces inside the string to a single space
-    """
+    - Converting multiple spaces to a single space
 
-    # strip() removes leading and trailing spaces
-    # split() splits on any whitespace sequence
-    # join() joins with a single space
+    Raises:
+        InvalidFullNameError: If string is invalid.
+    """
+    error_msg = error_msg or DEFAULT_ERROR_MESSAGE
+
+    if not is_valid_str(value):
+        raise InvalidFullNameError(error_msg)
+
     return " ".join(value.strip().split())
 
 
-import re
-
-
-def validate_email(email: str):
-    """Validate email format using basic regex pattern."""
+def validate_email(email: str, error_msg: str = None) -> str:
+    """
+    Validate email format using a basic regex.
+    Raises:
+        InvalidEmailError
+    """
+    error_msg = error_msg or DEFAULT_ERROR_MESSAGE
 
     if not email or not isinstance(email, str):
-        raise ValueError("Email is required")
+        raise InvalidEmailError(error_msg)
 
-    # Simple email regex
     pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
     if not re.match(pattern, email):
-        raise ValueError("Invalid email format")
+        raise InvalidEmailError(error_msg)
 
     return email
 
 
-def validate_password(password: str):
-    """Validate password meets minimum length requirement."""
+def validate_password(password: str, error_msg: str = None) -> str:
+    """
+    Validate password meets security requirements.
+    Raises:
+        InvalidPasswordError
+    """
+    error_msg = error_msg or DEFAULT_ERROR_MESSAGE
 
     if not password or not isinstance(password, str):
-        raise ValueError("Password is required")
+        raise InvalidPasswordError(error_msg)
 
     if len(password) < 6:
-        raise ValueError("Password must be at least 6 characters long")
+        raise InvalidPasswordError(error_msg)
 
-    # Later: add uppercase, numbers, special chars rules if desired
     return password
 
 
-def validate_phone_number(phone_number: str):
-    """Validate phone number and return digits-only version."""
-    if not phone_number or not isinstance(phone_number, str):
-        raise ValueError("Phone number is required")
+def validate_phone_number(phone_number: str, error_msg: str = None) -> str:
+    """
+    Validate phone number and return digits-only version.
+    Raises:
+        InvalidPhoneNumberError
+    """
+    error_msg = error_msg or DEFAULT_ERROR_MESSAGE
 
-    # Keep it simple: digits only + length >= 8
-    cleaned = re.sub(r"\D", "", phone_number)  # remove spaces/dashes
+    if not phone_number or not isinstance(phone_number, str):
+        raise InvalidPhoneNumberError(error_msg)
+
+    cleaned = re.sub(r"\D", "", phone_number)
+
     if len(cleaned) < 8:
-        raise ValueError("Phone number must contain at least 8 digits")
+        raise InvalidPhoneNumberError(error_msg)
 
     return cleaned
