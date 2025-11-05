@@ -33,4 +33,5 @@ def login_user(user: TokenLoginRequest, db: Session = Depends(get_db)):
     
     except Exception as e:
         # Catch-all for unexpected errors
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Unexpected error: {e}")
+        print(e)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Unexpected error happened.")
