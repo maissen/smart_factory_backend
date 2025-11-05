@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from src.db_crud.users.delete_user import delete_user_crud
+from db_crud.users.delete_user_crud import delete_user_crud
 
 
 def delete_user_by_id_service(db: Session, user_id: int) -> None:

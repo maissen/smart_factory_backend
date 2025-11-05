@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from src.db_crud.users.create_user import create_user_crud
+from db_crud.users.create_user_crud import create_user_crud
 from src.helpers.str_helpers import validate_email, validate_password, validate_phone_number, is_valid_str, normalize_str
 from src.services.user import get_user_by_email_service, get_user_by_phone_number_service
 

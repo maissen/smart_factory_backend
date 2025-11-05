@@ -1,22 +1,29 @@
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError, NoResultFound
+from sqlalchemy.exc import IntegrityError
 from src.models.user_model import User
 from src.core.settings import settings
 
-def update_user(db: Session, user_id: int, **kwargs) -> User:
-    """
-    kwargs can include: full_name, email, phone_number, role
-    """
+
+def update_user_crud(
+    db: Session,
+    user_id: int,
+    full_name: str,
+    email: str,
+    phone_number: str,
+    role: str
+) -> User:
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise ValueError("User not found")
 
-    if 'role' in kwargs and kwargs['role'] not in settings.USER_ALLOWED_ROLES:
+    if role not in settings.USER_ALLOWED_ROLES:
         raise ValueError(f"Role must be one of {settings.USER_ALLOWED_ROLES}")
 
-    for key, value in kwargs.items():
-        if hasattr(user, key):
-            setattr(user, key, value)
+    # Assign blindly
+    user.full_name = full_name
+    user.email = email
+    user.phone_number = phone_number
+    user.role = role
 
     try:
         db.commit()
