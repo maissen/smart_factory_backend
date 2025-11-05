@@ -28,6 +28,12 @@ class Settings(BaseSettings):
             f"/{self.POSTGRES_DB}"
         )
 
+    
+    # Security configuration
+    SECRET_KEY: str
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 20160 # two weeks
+    
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 
