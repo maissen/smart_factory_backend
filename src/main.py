@@ -4,7 +4,7 @@ from src.routes.user.create_user_route import router as register_route
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
-app.include_router(register_route)
+app.include_router(register_route, prefix="/api/users")
 
 @app.on_event("startup")
 def startup_event():

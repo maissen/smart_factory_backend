@@ -3,8 +3,7 @@ from sqlalchemy.orm import Session
 from src.db_crud.users.get_user_crud import get_user_by_email_crud
 
 from src.helpers.str_helpers import validate_email
-from src.exceptions import (
-    InvalidEmailError,
+from src.exceptions.user_exceptions import (
     EmailDoesNotExistError,
     UserFetchError
 )

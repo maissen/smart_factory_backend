@@ -4,7 +4,6 @@ from src.services.user.get_user_by_id_service import get_user_by_id_service
 
 from src.exceptions.user_exceptions import (
     InvalidUserIdError,
-    UserNotFoundError,
     UserDeletionError
 )
 
@@ -15,11 +14,6 @@ def delete_user_by_id_service(db: Session, user_id: int) -> None:
     - Validating input
     - Ensuring user exists (delegates to get_user_by_id_service)
     - Delegating deletion to CRUD layer
-
-    Raises:
-        InvalidUserIdError
-        UserNotFoundError
-        UserDeletionError
     """
 
     # Validate user_id
@@ -34,4 +28,4 @@ def delete_user_by_id_service(db: Session, user_id: int) -> None:
         delete_user_crud(db, user_id)
 
     except Exception as e:
-        raise UserDeletionError(f"Failed to delete user with ID {user_id}: {e}") from e
+        raise UserDeletionError(f"Failed to delete user.") from e

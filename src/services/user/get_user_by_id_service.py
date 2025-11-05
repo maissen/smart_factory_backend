@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from db_crud.users.get_user_crud import get_user_by_id_crud
+from src.db_crud.users.get_user_crud import get_user_by_id_crud
 
 from src.exceptions.user_exceptions import (
     InvalidUserIdError,

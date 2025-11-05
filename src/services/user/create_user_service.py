@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from db_crud.users.create_user_crud import create_user_crud
+from src.db_crud.users.create_user_crud import create_user_crud
 from src.helpers.str_helpers import (
     validate_email,
     validate_password,
@@ -8,10 +8,8 @@ from src.helpers.str_helpers import (
     is_valid_str,
     normalize_str
 )
-from src.services.user import (
-    get_user_by_email_service,
-    get_user_by_phone_number_service
-)
+from src.services.user.get_user_by_email_service import get_user_by_email_service
+from src.services.user.get_user_by_phone_number_service import get_user_by_phone_number_service
 
 from src.exceptions.user_exceptions import (
     InvalidFullNameError,

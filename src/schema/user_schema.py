@@ -1,40 +1,18 @@
 from pydantic import BaseModel
-from typing import Optional
 from datetime import datetime
-
-# -------------------------------
-# Base schema (optional fields)
-# -------------------------------
-class UserBase(BaseModel):
-    full_name: Optional[str] = None
-    email: Optional[str] = None
-    phone_number: Optional[str] = None
-    role: Optional[str] = None
+from src.core.settings import settings
 
 
-# -------------------------------
-# Request schemas
-# -------------------------------
-class UserCreate(UserBase):
+class UserRegisterRequest(BaseModel):
     full_name: str
     email: str
     password: str
-    role: str
+    role: str = settings.USER_ALLOWED_ROLES[1] # client
     phone_number: str
 
 
-class UserUpdate(UserBase):
-    pass  # all fields optional
 
-
-class PasswordUpdate(BaseModel):
-    old_password: str
-    new_password: str
-
-
-# -------------------------------
 # Response schemas
-# -------------------------------
 class UserResponse(BaseModel):
     id: int
     full_name: str
@@ -47,11 +25,3 @@ class UserResponse(BaseModel):
     model_config = {
         "from_attributes": True
     }
-
-
-class UserCreateResponse(UserResponse):
-    pass
-
-
-class PasswordUpdateResponse(BaseModel):
-    message: str
