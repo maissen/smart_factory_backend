@@ -28,15 +28,16 @@ def register_user(user: UserRegisterRequest, db: Session = Depends(get_db)):
     Register a new user (client or admin depending on role).
     """
 
+    new_user = create_user_service(
+        db=db,
+        full_name=user.full_name,
+        email=user.email,
+        password=user.password,
+        role=user.role,
+        phone_number=user.phone_number
+    )
+    
     try:
-        new_user = create_user_service(
-            db=db,
-            full_name=user.full_name,
-            email=user.email,
-            password=user.password,
-            role=user.role,
-            phone_number=user.phone_number
-        )
         return new_user
 
     except InvalidFullNameError as e:

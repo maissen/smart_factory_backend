@@ -27,6 +27,7 @@ def get_user_by_email_service(db: Session, email: str):
     # Attempt DB fetch
     try:
         user = get_user_by_email_crud(db, email)
+        print(f"fetched user by email : {user.email}")
 
     except Exception as e:
         # Convert unexpected DB errors to a domain-specific operational error
