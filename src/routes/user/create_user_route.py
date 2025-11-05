@@ -2,8 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from src.dependencies.postgres_dependency import get_db
 from src.schema.user_schema import UserCreate, UserCreateResponse
-# Change this import:
-from db_crud.users.create_user_crud import create_user_crud
+from src.db_crud.users.create_user_crud import create_user_crud
 
 router = APIRouter(
     prefix="/register",
@@ -15,7 +14,7 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     Register a new user (client or admin depending on role).
     """
     try:
-        new_user = create_user(
+        new_user = create_user_crud(
             db=db,
             full_name=user.full_name,
             email=user.email,
