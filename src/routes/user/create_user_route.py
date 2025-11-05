@@ -10,7 +10,9 @@ from src.exceptions.user_exceptions import (
     InvalidPhoneNumberError,
     EmailAlreadyExistsError,
     PhoneNumberAlreadyExistsError,
-    UserCreationError
+    UserCreationError,
+    InvalidRoleError,
+    EmptyRoleError
 )
 
 router = APIRouter(
@@ -49,6 +51,12 @@ def register_user(user: UserRegisterRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     
     except InvalidPhoneNumberError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    
+    except EmptyRoleError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    
+    except InvalidRoleError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     
     except EmailAlreadyExistsError as e:

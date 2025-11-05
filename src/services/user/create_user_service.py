@@ -6,7 +6,8 @@ from src.helpers.str_helpers import (
     validate_password,
     validate_phone_number,
     is_valid_str,
-    normalize_str
+    normalize_str,
+    validate_role
 )
 from src.services.user.get_user_by_email_optional_service import get_user_by_email_optional_service
 from src.services.user.get_user_by_phone_number_optional_service import get_user_by_phone_number_optional_service
@@ -51,6 +52,10 @@ def create_user_service(
     existing_phone_user = get_user_by_phone_number_optional_service(db=db, phone_number=validated_phone)
     if existing_phone_user:
         raise PhoneNumberAlreadyExistsError(f"Phone number is already in use.")
+    
+
+    # check user's role
+    validated_role = validate_role(role)
 
     # Attempt creation
     try:
@@ -59,7 +64,7 @@ def create_user_service(
             full_name=full_name,
             email=validated_email,
             password=validated_password,
-            role=role,
+            role=validated_role,
             phone_number=validated_phone
         )
 

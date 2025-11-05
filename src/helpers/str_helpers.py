@@ -1,9 +1,12 @@
 import re
+from src.core.settings import settings
 from src.exceptions.user_exceptions import (
+    EmptyRoleError,
     InvalidEmailError,
     InvalidPasswordError,
     InvalidPhoneNumberError,
-    InvalidFullNameError
+    InvalidFullNameError,
+    InvalidRoleError
 )
 
 
@@ -87,3 +90,22 @@ def validate_phone_number(phone_number: str) -> str:
         raise InvalidPhoneNumberError(f"Phone number length must be {MIN_PHONE_NUMBER_LENGTH}")
 
     return cleaned
+
+
+def validate_role(role: str) -> str:
+    """
+    Validate that the role is not empty and is one of the allowed roles.
+    
+    Raises:
+        EmptyRoleError: If role is an empty string or whitespace.
+        InvalidRoleError: If role is not in the allowed roles.
+    """
+    if not is_valid_str(role):
+        raise EmptyRoleError("Role must not be empty.")
+
+    normalized_role = role.strip().lower()
+
+    if normalized_role not in [r.lower() for r in settings.USER_ALLOWED_ROLES]:
+        raise InvalidRoleError(f"Role is invalid.")
+
+    return normalized_role
