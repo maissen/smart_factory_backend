@@ -27,7 +27,6 @@ def get_user_by_email_service(db: Session, email: str):
     # Attempt DB fetch
     try:
         user = get_user_by_email_crud(db, email)
-        print(f"fetched user by email : {user.email}")
 
     except Exception as e:
         # Convert unexpected DB errors to a domain-specific operational error
@@ -35,6 +34,6 @@ def get_user_by_email_service(db: Session, email: str):
 
     # Not found → email does not exist (404)
     if user is None:
-        raise EmailDoesNotExistError(f"No user found")
+        raise EmailDoesNotExistError(f"User with this email does not exist.")
 
     return user

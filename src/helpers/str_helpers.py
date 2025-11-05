@@ -68,7 +68,7 @@ def validate_password(password: str) -> str:
     if not password or not isinstance(password, str):
         raise InvalidPasswordError("Password must be a string")
 
-    if len(password) < 6:
+    if len(password) < MIN_PASSWORD_LENGTH:
         raise InvalidPasswordError(f"Password length must be at least {MIN_PASSWORD_LENGTH} caracters")
 
     return password

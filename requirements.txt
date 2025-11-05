@@ -5,3 +5,4 @@ sqlalchemy==2.0.44
 alembic==1.17.1
 psycopg2-binary==2.9.9
 passlib
+PyJWT==2.8.0

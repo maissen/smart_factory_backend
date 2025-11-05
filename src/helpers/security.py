@@ -2,9 +2,9 @@ import jwt
 from datetime import datetime, timedelta
 from src.core.settings import settings
 
-SECRET_KEY = settings.JWT_SECRET_KEY
+SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
-ACCESS_TOKEN_EXPIRE_MINUTES = settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
