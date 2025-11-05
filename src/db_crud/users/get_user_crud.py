@@ -9,6 +9,10 @@ def get_user_by_email_crud(db: Session, email: str) -> User | None:
     return db.query(User).filter(User.email == email).first()
 
 
+def get_user_by_phone_number_crud(db: Session, phone_number: str) -> User | None:
+    return db.query(User).filter(User.phone_number == phone_number).first()
+
+
 def get_all_users(db: Session, role: str | None = None) -> list[User]:
     query = db.query(User)
     if role:
