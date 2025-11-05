@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from src.dependencies.postgres_dependency import get_db
 from src.schema.user_schema import UserCreate, UserCreateResponse
 # Change this import:
-from src.db_crud.users.create_user import create_user  # Import the function directly
+from src.db_crud.users.create_user import create_user_crud
 
 router = APIRouter(
     prefix="/register",

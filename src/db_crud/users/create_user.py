@@ -4,7 +4,7 @@ from src.models.user_model import User
 from src.core.settings import settings
 from src.helpers.auth import get_password_hash
 
-def create_user(db: Session, full_name: str, email: str, password: str, role: str, phone_number: str) -> User:
+def create_user_crud(db: Session, full_name: str, email: str, password: str, role: str, phone_number: str) -> User:
     if role not in settings.USER_ALLOWED_ROLES:
         raise ValueError(f"Role must be one of {settings.USER_ALLOWED_ROLES}")
 
@@ -23,6 +23,7 @@ def create_user(db: Session, full_name: str, email: str, password: str, role: st
         db.commit()
         db.refresh(new_user)
         return new_user
+    
     except IntegrityError as e:
         db.rollback()
         raise ValueError("User with given email or phone number already exists") from e
