@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from src.db_crud.users.get_user_crud import get_all_users_crud
 from src.helpers.str_helpers import is_valid_str
+from src.core.settings import settings
 
 from src.exceptions.user_exceptions import (
     InvalidRoleError,
@@ -8,7 +9,7 @@ from src.exceptions.user_exceptions import (
 )
 
 
-def get_all_users_service(db: Session, role: str | None = None):
+def get_all_users_service(db: Session, role: str | None):
     """
     Service function to retrieve all users, optionally filtered by role.
     Includes validation and controlled exception behavior.
@@ -19,9 +20,12 @@ def get_all_users_service(db: Session, role: str | None = None):
         UserFetchError: If database operation fails.
     """
 
-    # Validate role input
-    if not is_valid_str():
-        raise InvalidRoleError("Role must be a non-empty string.")
+    if role is not None: # None if the role is not passed to the service
+        if not is_valid_str(role):
+            raise InvalidRoleError("Role must be a non-empty string.")
+
+        if role not in settings.USER_ALLOWED_ROLES:
+            raise InvalidRoleError(f"Role is not allowed. Allowed roles: {settings.USER_ALLOWED_ROLES}")
 
     try:
         users = get_all_users_crud(db, role)
