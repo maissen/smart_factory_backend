@@ -17,6 +17,7 @@ class FactoryUpdateRequest(BaseModel):
 
 class FactoryResponse(BaseModel):
     id: int
+    owner_id: int
     name: str
     location: str
     description: str

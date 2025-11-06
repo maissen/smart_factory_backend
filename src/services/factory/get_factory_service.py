@@ -1,11 +1,10 @@
-from db_crud.factory.get_factory_crud import get_factory_of_user_crud
 from sqlalchemy.orm import Session
 
 from src.models.factory_model import Factory
 from src.services.user.get_user_by_id_service import get_user_by_id_service
-from src.db_crud.factory import (
+from src.db_crud.factory.get_factory_crud import (
     get_factory_by_id_crud,
-    get_factories_by_owner_crud,
+    get_factory_by_owner_crud,
     get_all_factories_crud,
 )
 from src.exceptions.factory_exceptions import (
@@ -30,7 +29,7 @@ def get_factory_by_id_service(db: Session, factory_id: int) -> Factory:
 def list_factories_service(db: Session, admin: bool, user_id: int = None) -> list[Factory]:
     if admin:
         return get_all_factories_crud(db)
-    return get_factories_by_owner_crud(db, user_id)
+    return get_factory_by_owner_crud(db, user_id)
 
 
 def get_factory_of_user_service(
@@ -47,8 +46,8 @@ def get_factory_of_user_service(
 
 
     try:
-        factory = get_factory_of_user_crud(db, user_id)
-        
+        factory = get_factory_by_owner_crud(db, user_id)
+
     except:
         raise FactoryNotFoundError("User does not have a factory.")
 
