@@ -6,7 +6,6 @@ class FactoryRegisterRequest(BaseModel):
     name: str
     location: str
     description: str
-    owner_id: int
 
 
 class FactoryUpdateRequest(BaseModel):

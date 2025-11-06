@@ -2,11 +2,13 @@ from fastapi import FastAPI
 from src.core.settings import settings
 from src.routes.user import router as user_routes
 from src.routes.auth import router as auth_routes
+from src.routes.factory import router as factory_routes
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
 app.include_router(user_routes, prefix="/api/users")
 app.include_router(auth_routes, prefix="/api/auth")
+app.include_router(factory_routes, prefix="/api/factory")
 
 @app.on_event("startup")
 def startup_event():
