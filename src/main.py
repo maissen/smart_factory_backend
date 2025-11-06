@@ -1,32 +1,13 @@
-from fastapi import FastAPI, Depends
-from src.dependencies.get_current_user_dependency import get_current_user
-from src.schema.user_schema import UserResponse
+from fastapi import FastAPI
 from src.core.settings import settings
-from src.routes.user.create_user_route import router as register_route
-from src.routes.auth.login_route import router as login_route
-from src.routes.user.get_all_users_route import router as get_users_route
-from src.routes.user.delete_user_route import router as delete_user_route
-from src.routes.user.update_user_route import router as update_user_route
-from src.routes.user.update_user_password_route import router as update_user_password_route
-from src.schema.user_schema import UserResponse
+from src.routes.user import router as user_routes
+from src.routes.auth import router as auth_routes
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
-app.include_router(register_route, prefix="/api/users")
-app.include_router(get_users_route, prefix="/api/users")
-app.include_router(delete_user_route, prefix="/api/users")
-app.include_router(update_user_route, prefix="/api/users")
-app.include_router(update_user_password_route, prefix="/api/users")
-app.include_router(login_route, prefix="/api/login")
+app.include_router(user_routes, prefix="/api/users")
+app.include_router(auth_routes, prefix="/api/auth")
 
 @app.on_event("startup")
 def startup_event():
     print(f"{settings.PROJECT_NAME} started successfully!")
-
-
-@app.get("/me", response_model=UserResponse)
-def get_me(current_user: UserResponse = Depends(get_current_user)):
-    """
-    Get info about the currently logged-in user.
-    """
-    return current_user

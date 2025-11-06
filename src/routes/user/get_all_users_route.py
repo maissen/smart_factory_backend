@@ -11,12 +11,9 @@ from src.exceptions.user_exceptions import (
 )
 from src.core.settings import settings
 
-router = APIRouter(
-    prefix="",
-    tags=["Users"]
-)
+router = APIRouter()
 
-@router.get("", response_model=list[UserResponse])
+@router.get("/", response_model=list[UserResponse])
 def get_all_users(
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user),

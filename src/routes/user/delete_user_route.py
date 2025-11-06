@@ -7,10 +7,7 @@ from src.services.user.delete_user_service import delete_user_by_id_service
 from src.exceptions.user_exceptions import InvalidUserIdError, UserDeletionError, UserNotAllowedError
 from src.core.settings import settings
 
-router = APIRouter(
-    prefix="",
-    tags=["users"]
-)
+router = APIRouter()
 
 @router.delete("/delete/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(

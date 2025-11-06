@@ -18,7 +18,7 @@ from src.exceptions.user_exceptions import (
 
 
 
-router = APIRouter(prefix="", tags=["Users"])
+router = APIRouter()
 
 
 @router.put("/update/password/{user_id}")

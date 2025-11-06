@@ -15,9 +15,7 @@ from src.exceptions.user_exceptions import (
     EmptyRoleError
 )
 
-router = APIRouter(
-    prefix="",
-)
+router = APIRouter()
 
 
 @router.post(

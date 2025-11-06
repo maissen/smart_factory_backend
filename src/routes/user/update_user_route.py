@@ -20,7 +20,7 @@ from src.exceptions.user_exceptions import (
     UserNotAllowedError
 )
 
-router = APIRouter(prefix="", tags=["Users"])
+router = APIRouter()
 
 
 @router.put("/update/{user_id}", response_model=UserResponse)
