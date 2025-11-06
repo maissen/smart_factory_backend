@@ -141,7 +141,7 @@ class IncorrectPasswordError(UserAuthenticationError):
     pass
 
 
-class MissingOldPasswordError(UserValidationError):
+class MissingPasswordError(UserValidationError):
     """
     Raised when old password is not provided during password update.
     """

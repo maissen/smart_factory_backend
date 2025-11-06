@@ -19,6 +19,12 @@ class UserUpdateRequest(BaseModel):
 
 
 
+class UserUpdatePasswordRequest(BaseModel):
+    old_password: str
+    new_password: str
+
+
+
 # Response schemas
 class UserResponse(BaseModel):
     id: int
