@@ -194,3 +194,15 @@ class PasswordUpdateError(UserOperationError):
     Raised when password update fails due to internal errors.
     """
     pass
+
+
+# ============================================
+# Authorization Errors (403)
+# ============================================
+
+class UserNotAllowedError(UserError):
+    """
+    Raised when a user is not allowed to perform an action.
+    Maps to: HTTP 403
+    """
+    pass
