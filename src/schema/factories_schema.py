@@ -12,7 +12,6 @@ class FactoryUpdateRequest(BaseModel):
     name: str
     location: str
     description: str
-    updated_at: str
 
 
 class FactoryResponse(BaseModel):

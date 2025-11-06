@@ -22,7 +22,7 @@ def get_factory_by_id_service(db: Session, factory_id: int) -> Factory:
 
     factory = get_factory_by_id_crud(db, factory_id)
     if not factory:
-        raise FactoryNotFoundError(factory_id)
+        raise FactoryNotFoundError("Factory is not found.")
     return factory
 
 

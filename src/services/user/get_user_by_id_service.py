@@ -29,7 +29,6 @@ def get_user_by_id_service(db: Session, user_id: int):
     # Database call with controlled error handling
     try:
         user = get_user_by_id_crud(db, user_id)
-        print(user)
     except Exception as e:
         # Database or internal failure
         raise UserFetchError(f"Failed to fetch user.")

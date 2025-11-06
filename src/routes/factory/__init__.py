@@ -1,7 +1,9 @@
 from fastapi import APIRouter
 from .create_factory_route import router as create_route
-from .get_factory_route import router as get_factory_route
+from .get_factory_route import router as get_route
+from .update_factory_route import router as update_route
 
 router = APIRouter()
 router.include_router(create_route)
-router.include_router(get_factory_route)
+router.include_router(get_route)
+router.include_router(update_route)

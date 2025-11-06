@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import func
 
 from src.models.factory_model import Factory
 
@@ -11,7 +12,6 @@ def update_factory_crud(
     location: str,
     description: str,
 ) -> Factory:
-    
     factory = db.query(Factory).filter(Factory.id == factory_id).first()
     if not factory:
         raise ValueError("Factory not found")
@@ -19,6 +19,8 @@ def update_factory_crud(
     factory.name = name
     factory.location = location
     factory.description = description
+    
+    factory.updated_at = func.now()
 
     try:
         db.commit()
