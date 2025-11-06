@@ -12,6 +12,13 @@ class UserRegisterRequest(BaseModel):
 
 
 
+class UserUpdateRequest(BaseModel):
+    full_name: str
+    email: str
+    phone_number: str
+
+
+
 # Response schemas
 class UserResponse(BaseModel):
     id: int
