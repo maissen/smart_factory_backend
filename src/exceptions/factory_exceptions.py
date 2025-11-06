@@ -30,3 +30,8 @@ class FactoryDeleteError(FactoryError):
 class FactoryPermissionError(FactoryError):
     """Raised when user does not have permission to modify this factory."""
     pass
+
+
+class InvalidFactoryIdError(FactoryError):
+    """Raised when the factory id is invalid"""
+    pass

@@ -28,4 +28,4 @@ def create_factory_service(
         return create_factory_crud(db, name, location, description, owner_id)
     
     except ValueError:
-        raise FactoryAlreadyExistsError("Factory could not be created. Conflicting data.")
+        raise FactoryAlreadyExistsError("Each user can only has one factory.")
