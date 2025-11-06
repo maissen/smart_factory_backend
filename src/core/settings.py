@@ -33,6 +33,12 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 20160 # two weeks
+
+
+    # application configuration
+    DEFAULT_ERROR_MESSAGE: str
+    MIN_PASSWORD_LENGTH: int
+    MIN_PHONE_NUMBER_LENGTH: int
     
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

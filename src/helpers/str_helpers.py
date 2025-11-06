@@ -11,11 +11,6 @@ from src.exceptions.user_exceptions import (
 
 
 
-DEFAULT_ERROR_MESSAGE = "error message must be passed"
-MIN_PASSWORD_LENGTH = 8
-MIN_PHONE_NUMBER_LENGTH = 8
-
-
 def is_valid_str(value: str) -> bool:
     """
     Returns True if the given string is not None, not empty,
@@ -33,7 +28,7 @@ def normalize_str(value: str, error_msg: str = None) -> str:
     Raises:
         InvalidFullNameError: If string is invalid.
     """
-    error_msg = error_msg or DEFAULT_ERROR_MESSAGE
+    error_msg = error_msg or settings.DEFAULT_ERROR_MESSAGE
 
     if not is_valid_str(value):
         raise InvalidFullNameError(error_msg)
@@ -68,7 +63,7 @@ def validate_password(password: str) -> str:
     if not password or not isinstance(password, str):
         raise InvalidPasswordError("Password must be a string")
 
-    if len(password) < MIN_PASSWORD_LENGTH:
+    if len(password) < settings.MIN_PASSWORD_LENGTH:
         raise InvalidPasswordError(f"Password length must be at least {MIN_PASSWORD_LENGTH} caracters")
 
     return password
@@ -87,7 +82,7 @@ def validate_phone_number(phone_number: str) -> str:
     cleaned = re.sub(r"\D", "", phone_number)
 
     if len(cleaned) < 8:
-        raise InvalidPhoneNumberError(f"Phone number length must be {MIN_PHONE_NUMBER_LENGTH}")
+        raise InvalidPhoneNumberError(f"Phone number length must be {settings.MIN_PHONE_NUMBER_LENGTH}")
 
     return cleaned
 
