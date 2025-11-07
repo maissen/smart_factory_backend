@@ -22,6 +22,7 @@ from src.core.settings import settings
 # Import all models here so Alembic can detect them
 from src.models.user_model import User 
 from src.models.factory_model import Factory
+from src.models.shifts_model import Shift
 
 target_metadata = Base.metadata
 
