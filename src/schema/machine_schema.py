@@ -17,6 +17,7 @@ class MachineUpdateRequestSchema(BaseModel):
 
 
 class MachineResponseSchema(BaseModel):
+    id: int
     name: str
     serial_number: str
     status: str

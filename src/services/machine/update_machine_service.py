@@ -1,13 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
-from src.db_crud.machines import (
-    create_machine_crud,
-    update_machine_crud,
-    delete_machine_crud,
-    get_machine_by_id_crud,
-    get_all_machines_crud
-)
+from src.db_crud.machine.machine_crud import update_machine_crud
 from src.exceptions.machine_exceptions import (
     MachineError,
     MachineNotFoundError,
@@ -19,13 +13,13 @@ from src.exceptions.machine_exceptions import (
 from src.exceptions.user_exceptions import UserAuthorizationError
 from src.helpers.str_helpers import is_valid_str, normalize_str
 from src.services.factory.get_factory_service import get_factory_of_user_service
+from src.services.machine.get_machine_service import get_all_factory_machines_service, get_machine_by_serial_service, get_machine_by_name_service
 from src.core.settings import settings
 
 
 def update_machine_service(
     db: Session,
     machine_id: int,
-    factory_id: int,
     user_id: int,
     name: str,
     serial_number: str,
@@ -34,25 +28,38 @@ def update_machine_service(
     description: str = None
 ):
     """Service to update an existing machine by ID with all fields."""
-
-    machine = get_machine_by_id_crud(db=db, machine_id=machine_id)
-    if not machine:
-        raise MachineNotFoundError(f"Machine with ID {machine_id} not found.")
     
     factory = get_factory_of_user_service(db=db, user_id=user_id)
-    if not factory.owner_id != user_id:
+    if factory.owner_id != user_id:
         raise UserAuthorizationError("You're not authorized to perform this action.")
 
-    if machine.factory_id != factory_id:
+    machines = get_all_factory_machines_service(db=db, factory_id=factory.id, user_id=user_id)
+    machine = None
+    for m in machines:
+        if m.id == machine_id:
+            machine = m
+            break
+    else:
+        raise MachineNotFoundError(f"Machine does not exist.")
+
+    if machine.factory_id != factory.id:
         raise MachineAccessDeniedError("You cannot update a machine from another factory.")
 
     if not is_valid_str(name):
         raise MachineError("Machine name is required.")
     name = normalize_str(name)
+    machine_by_name = get_machine_by_name_service(db=db, name=name, raise_if_not_found=False)
+    if machine_by_name:
+        raise MachineNameAlreadyExistsError("Another machine with this name already exists.")
 
     if not is_valid_str(serial_number):
         raise MachineError("Serial number is required.")
     serial_number = normalize_str(serial_number)
+    machine_by_serial_nb = get_machine_by_serial_service(db=db, serial_number=serial_number, raise_if_not_found=False)
+    if machine_by_serial_nb:
+        print('machine is found')
+        raise MachineSerialNumberAlreadyExistsError("Another machine with this serial number exists.")
+    # print(machine_by_serial_nb.serial_number)
 
     if status not in settings.MACHINE_POSSIBLE_STATUS:
         raise InvalidMachineStatusError(f"Invalid status: {status}")
@@ -61,7 +68,6 @@ def update_machine_service(
         updated_machine = update_machine_crud(
             db=db,
             machine_id=machine_id,
-            factory_id=factory_id,
             name=name,
             serial_number=serial_number,
             status=status,
@@ -69,14 +75,8 @@ def update_machine_service(
             description=description
         )
 
-    except IntegrityError as e:
-        if "machines_name_key" in str(e.orig):
-            raise MachineNameAlreadyExistsError(f"Machine name '{name}' already exists.")
-        elif "machines_serial_number_key" in str(e.orig):
-            raise MachineSerialNumberAlreadyExistsError(f"Serial number '{serial_number}' already exists.")
-        else:
-            print(e)
-            raise MachineError(f"Unexpected database error.")
+    except Exception as e:  
+        raise MachineError(f"Unexpected database error: {e}")
 
     return updated_machine
 
