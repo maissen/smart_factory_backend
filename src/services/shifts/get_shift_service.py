@@ -38,7 +38,7 @@ def get_shift_of_factory_service(db: Session, factory_id: int, current_user) -> 
     if not shift:
         raise ShiftNotFoundError(f"This Factory has no shift yet.")
 
-    return 
+    return shift
 
 
 def check_if_factory_has_shift_service(db: Session, factory_id: int, current_user) -> bool:

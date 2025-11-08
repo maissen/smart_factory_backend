@@ -43,3 +43,7 @@ def get_shift_of_factory_route(
 
     except FactoryNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail="An error occured while fetching shift")
