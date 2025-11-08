@@ -1,4 +1,4 @@
-from datetime import time
+from datetime import datetime, time
 from pydantic import BaseModel
 
 
@@ -20,6 +20,8 @@ class ShiftResponseSchema(BaseModel):
     name: str
     start_time: time
     end_time: time
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True
