@@ -25,3 +25,18 @@ class MachineAccessDeniedError(MachineError):
     Used only if your auth rules require client isolation.
     """
     pass
+
+
+class MachineFetchError(MachineError):
+    """
+    Raised when an error occur while fetching the machine from the database.
+    """
+    pass
+
+
+class MachineInvalidNameError(MachineError):
+    pass
+
+class MachineInvalidSerialNumberError(MachineError):
+    pass
+

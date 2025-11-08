@@ -141,6 +141,13 @@ class IncorrectPasswordError(UserAuthenticationError):
     pass
 
 
+class UserAuthorizationError(UserError):
+    """
+    Raised when the user is not authorized to perform a specific action
+    """
+    pass
+
+
 class MissingPasswordError(UserValidationError):
     """
     Raised when old password is not provided during password update.

@@ -28,7 +28,7 @@ def create_machine_crud(
     return machine
 
 
-def get_machines_crud(
+def get_factory_machines_crud(
     db: Session,
     factory_id: int | None = None,
 ) -> list[Machine]:
