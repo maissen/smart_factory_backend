@@ -28,10 +28,9 @@ def normalize_str(value: str, error_msg: str = None) -> str:
     Raises:
         InvalidFullNameError: If string is invalid.
     """
-    error_msg = error_msg or settings.DEFAULT_ERROR_MESSAGE
 
     if not is_valid_str(value):
-        raise InvalidFullNameError(error_msg)
+        raise InvalidFullNameError()
 
     return " ".join(value.strip().split())
 
@@ -64,7 +63,7 @@ def validate_password(password: str) -> str:
         raise InvalidPasswordError("Password must be a string")
 
     if len(password) < settings.MIN_PASSWORD_LENGTH:
-        raise InvalidPasswordError(f"Password length must be at least {MIN_PASSWORD_LENGTH} caracters")
+        raise InvalidPasswordError(f"Password length must be at least {settings.MIN_PASSWORD_LENGTH} caracters")
 
     return password
 
@@ -96,11 +95,11 @@ def validate_role(role: str) -> str:
         InvalidRoleError: If role is not in the allowed roles.
     """
     if not is_valid_str(role):
-        raise EmptyRoleError("Role must not be empty.")
+        raise EmptyRoleError()
 
     normalized_role = role.strip().lower()
 
     if normalized_role not in [r.lower() for r in settings.USER_ALLOWED_ROLES]:
-        raise InvalidRoleError(f"Role is invalid.")
+        raise InvalidRoleError()
 
     return normalized_role

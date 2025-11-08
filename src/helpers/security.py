@@ -1,6 +1,7 @@
 import jwt
 from datetime import datetime, timedelta
 from src.core.settings import settings
+from src.exceptions.token_exceptions import *
 
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
@@ -38,7 +39,7 @@ def decode_access_token(token: str) -> dict:
         return payload
     
     except jwt.ExpiredSignatureError:
-        raise ValueError("Token has expired")
+        raise TokenExpiredError()
     
     except jwt.InvalidTokenError:
-        raise ValueError("Invalid token")
+        raise InvalidTokenError()

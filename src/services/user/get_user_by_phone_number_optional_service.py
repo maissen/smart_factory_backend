@@ -20,4 +20,4 @@ def get_user_by_phone_number_optional_service(db: Session, phone_number: str):
 
     except Exception as e:
         # Wrap unexpected DB errors
-        raise UserFetchError(f"Failed to fetch user for phone number existence check: {e}")
+        raise UserFetchError()

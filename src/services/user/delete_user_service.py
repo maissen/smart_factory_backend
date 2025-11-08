@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 from src.db_crud.users.delete_user_crud import delete_user_crud
 from src.services.user.get_user_by_id_service import get_user_by_id_service
-from src.core.settings import settings
 
 from src.exceptions.user_exceptions import (
     InvalidUserIdError,
@@ -20,18 +19,18 @@ def delete_user_by_id_service(db: Session, user_id: int) -> None:
 
     # Validate user_id
     if not isinstance(user_id, int) or user_id <= 0:
-        raise InvalidUserIdError("User ID must be a positive integer.")
+        raise InvalidUserIdError()
 
     # Ensure user exists and let the underlying service raise UserNotFoundError if needed
     user = get_user_by_id_service(db=db, user_id=user_id)
 
     # Enforce role-based restriction: only admin can delete certain users
     if user.role != "admin":
-        raise UserNotAllowedError("You do not have permission to delete users.")
+        raise UserNotAllowedError()
 
     # Try deleting user
     try:
         delete_user_crud(db, user_id)
 
     except Exception as e:
-        raise UserDeletionError(f"Failed to delete user.") from e
+        raise UserDeletionError()

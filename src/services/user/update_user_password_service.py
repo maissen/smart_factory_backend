@@ -25,7 +25,7 @@ def update_password_service(
 
     # Validate user_id
     if not isinstance(user_id, int) or user_id <= 0:
-        raise InvalidUserIdError("User ID must be a positive integer.")
+        raise InvalidUserIdError()
     
     validate_password(new_password)
     validate_password(old_password)
@@ -34,13 +34,13 @@ def update_password_service(
     user = get_user_by_id_service(db=db, user_id=user_id)
 
     if not old_password: # if password is empty
-        raise MissingPasswordError("Old password is required.")
+        raise MissingPasswordError()
     
     if not new_password: # if password is empty
-        raise MissingPasswordError("New password is required.")
+        raise MissingPasswordError()
     
     elif not verify_password(plain_password=old_password, hashed_password=user.password_hash): # compare password hashes
-        raise IncorrectPasswordError("Old password is incorrect.")
+        raise IncorrectPasswordError()
 
     # Validate new_password
     validated_new_password = validate_password(new_password)
@@ -56,4 +56,4 @@ def update_password_service(
 
     except Exception as e:
         # Catch-all for unexpected DB failures
-        raise PasswordUpdateError(f"Failed to update passowrd.")
+        raise PasswordUpdateError()

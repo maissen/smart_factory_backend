@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Session
 from src.helpers.factory import assert_factory_access
-from src.models.factory_model import Factory
 from src.models.shifts_model import Shift
 from src.services.factory.get_factory_service import get_factory_by_id_service
 
@@ -18,7 +17,7 @@ def get_shift_by_id_service(db: Session, shift_id: int, current_user) -> Shift:
     try:
         shift = get_shift_by_id_crud(db, shift_id)
     except:
-        raise ShiftNotFoundError(f"Shift with id {shift_id} is not found.")
+        raise ShiftNotFoundError()
 
     assert_factory_access(shift.factory, current_user)
 
@@ -36,7 +35,7 @@ def get_shift_of_factory_service(db: Session, factory_id: int, current_user) -> 
     shift = get_shift_by_factory_id_crud(db, factory_id)
 
     if not shift:
-        raise ShiftNotFoundError(f"This Factory has no shift yet.")
+        raise ShiftNotFoundError()
 
     return shift
 

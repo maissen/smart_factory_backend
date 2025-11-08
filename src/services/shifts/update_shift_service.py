@@ -13,7 +13,6 @@ from src.helpers.factory import assert_factory_access
 from src.exceptions.shifts_exceptions import (
     ShiftEndTimeIsInvalidError,
     ShiftNameIsInvalidError,
-    ShiftNotFoundError,
     ShiftStartTimeIsInvalidError,
 )
 
@@ -31,14 +30,14 @@ def update_shift_service(
     """
     # Validate input
     if not is_valid_str(name):
-        raise ShiftNameIsInvalidError("Shift name must be a non-empty valid string.")
+        raise ShiftNameIsInvalidError()
     
     # Validate time input
     if not isinstance(start_time, time):
-        raise ShiftStartTimeIsInvalidError("Shift start_time must be a valid time object.")
+        raise ShiftStartTimeIsInvalidError()
 
     if not isinstance(end_time, time):
-        raise ShiftEndTimeIsInvalidError("Shift end_time must be a valid time object.")
+        raise ShiftEndTimeIsInvalidError()
 
     # Fetch the shift and factory
     shift = get_shift_by_id_service(db=db, shift_id=shift_id, current_user=current_user)

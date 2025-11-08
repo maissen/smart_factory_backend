@@ -18,7 +18,7 @@ def login_user_service(db: Session, email: str, password: str) -> TokenResponse:
     user = get_user_by_email_service(db, email)
 
     if not pwd_context.verify(password, user.password_hash):
-        raise IncorrectPasswordError("Password is incorrect.")
+        raise IncorrectPasswordError()
 
     # Prepare token payload
     expiration_time = datetime.now(tz=timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)

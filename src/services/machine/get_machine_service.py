@@ -26,12 +26,12 @@ def get_all_factory_machines_service(db: Session, user_id: int, factory_id: int 
 
     # check if user is authorized
     if not factory.owner_id != user_id and user.role != settings.USER_ALLOWED_ROLES[0]: #admin
-        raise UserAuthorizationError("User is not authorized to perform this action.")
+        raise UserAuthorizationError()
 
     try:
         machines = get_factory_machines_crud(db=db, factory_id=factory_id)
     except:
-        raise MachineFetchError("An error occured while fetching machines.")
+        raise MachineFetchError()
 
     return machines
 
@@ -53,7 +53,7 @@ def get_machine_by_serial_service(
     machine = get_machine_by_serial_crud(db=db, serial_number=serial_number)
     
     if not machine and raise_if_not_found:
-        raise MachineNotFoundError(f"Machine with serial number '{serial_number}' not found.")
+        raise MachineNotFoundError()
     
     return machine
 
@@ -70,11 +70,11 @@ def get_machine_by_name_service(
         db: SQLAlchemy session
         name: Machine name to search for
         raise_if_not_found: If True, raises MachineNotFoundError when not found;
-                            otherwise returns None
+        otherwise returns None
     """
     machine = get_machine_by_name_crud(db=db, name=name)
 
     if not machine and raise_if_not_found:
-        raise MachineNotFoundError(f"Machine with name '{name}' not found.")
+        raise MachineNotFoundError()
 
     return machine

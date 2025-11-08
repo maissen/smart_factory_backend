@@ -21,20 +21,20 @@ def get_user_by_id_service(db: Session, user_id: int):
 
     # Input validation
     if not isinstance(user_id, int):
-        raise InvalidUserIdError("User ID must be an integer.")
+        raise InvalidUserIdError()
 
     if user_id <= 0:
-        raise InvalidUserIdError("User ID must be a positive integer.")
+        raise InvalidUserIdError()
 
     # Database call with controlled error handling
     try:
         user = get_user_by_id_crud(db, user_id)
     except Exception as e:
         # Database or internal failure
-        raise UserFetchError(f"Failed to fetch user.")
+        raise UserFetchError()
 
     # Handle missing user
     if user is None:
-        raise UserNotFoundError(f"User does not exist.")
+        raise UserNotFoundError()
 
     return user

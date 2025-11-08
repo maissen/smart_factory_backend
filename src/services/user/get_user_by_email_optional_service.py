@@ -15,4 +15,4 @@ def get_user_by_email_optional_service(db: Session, email: str):
         return get_user_by_email_crud(db, email)
     
     except Exception as e:
-        raise UserFetchError(f"Failed to fetch user for email existence check: {e}")
+        raise UserFetchError()

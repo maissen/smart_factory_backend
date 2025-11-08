@@ -30,10 +30,10 @@ def get_user_by_email_service(db: Session, email: str):
 
     except Exception as e:
         # Convert unexpected DB errors to a domain-specific operational error
-        raise UserFetchError(f"Failed to fetch user.")
+        raise UserFetchError()
 
     # Not found → email does not exist (404)
     if user is None:
-        raise EmailDoesNotExistError(f"User with this email does not exist.")
+        raise EmailDoesNotExistError()
 
     return user

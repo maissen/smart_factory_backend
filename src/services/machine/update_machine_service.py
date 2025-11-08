@@ -31,7 +31,7 @@ def update_machine_service(
     
     factory = get_factory_of_user_service(db=db, user_id=user_id)
     if factory.owner_id != user_id:
-        raise UserAuthorizationError("You're not authorized to perform this action.")
+        raise UserAuthorizationError()
 
     machines = get_all_factory_machines_service(db=db, factory_id=factory.id, user_id=user_id)
     machine = None
@@ -40,17 +40,17 @@ def update_machine_service(
             machine = m
             break
     else:
-        raise MachineNotFoundError(f"Machine does not exist.")
+        raise MachineNotFoundError()
 
     if machine.factory_id != factory.id:
-        raise MachineAccessDeniedError("You cannot update a machine from another factory.")
+        raise MachineAccessDeniedError()
 
     if not is_valid_str(name):
-        raise MachineError("Machine name is required.")
+        raise MachineError()
     name = normalize_str(name)
     machine_by_name = get_machine_by_name_service(db=db, name=name, raise_if_not_found=False)
     if machine_by_name:
-        raise MachineNameAlreadyExistsError("Another machine with this name already exists.")
+        raise MachineNameAlreadyExistsError()
 
     if not is_valid_str(serial_number):
         raise MachineError("Serial number is required.")
@@ -58,11 +58,10 @@ def update_machine_service(
     machine_by_serial_nb = get_machine_by_serial_service(db=db, serial_number=serial_number, raise_if_not_found=False)
     if machine_by_serial_nb:
         print('machine is found')
-        raise MachineSerialNumberAlreadyExistsError("Another machine with this serial number exists.")
-    # print(machine_by_serial_nb.serial_number)
+        raise MachineSerialNumberAlreadyExistsError()
 
     if status not in settings.MACHINE_POSSIBLE_STATUS:
-        raise InvalidMachineStatusError(f"Invalid status: {status}")
+        raise InvalidMachineStatusError()
 
     try:
         updated_machine = update_machine_crud(
@@ -76,7 +75,7 @@ def update_machine_service(
         )
 
     except Exception as e:  
-        raise MachineError(f"Unexpected database error: {e}")
+        raise MachineError()
 
     return updated_machine
 

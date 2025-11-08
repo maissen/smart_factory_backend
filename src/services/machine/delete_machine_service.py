@@ -16,7 +16,7 @@ def delete_machine_service(db: Session, machine_id: int, user_id: int):
 
     factory = get_factory_of_user_service(db=db, user_id=user_id)
     if factory.owner_id != user_id:
-        raise UserAuthorizationError("You're not authorized to perform this action.")
+        raise UserAuthorizationError()
     
     machines = get_all_factory_machines_service(db=db, factory_id=factory.id, user_id=user_id)
     machine = None
@@ -25,10 +25,10 @@ def delete_machine_service(db: Session, machine_id: int, user_id: int):
             machine = m
             break
     else:
-        raise MachineNotFoundError(f"Machine with ID {machine_id} not found.")
+        raise MachineNotFoundError()
     
     if machine.factory_id != factory.id:
-        raise MachineAccessDeniedError("You cannot update a machine from another factory.")
+        raise MachineAccessDeniedError()
 
     deleted_machine = delete_machine_crud(db=db, machine_id=machine_id)
     return deleted_machine

@@ -6,6 +6,7 @@ from src.exceptions.factory_exceptions import *
 from src.exceptions.machine_exceptions import *
 from src.exceptions.shifts_exceptions import *
 from src.exceptions.user_exceptions import *
+from src.exceptions.token_exceptions import *
 
 
 def register_exception_handlers(app):
@@ -72,6 +73,10 @@ def register_exception_handlers(app):
         UserDeletionError: status.HTTP_500_INTERNAL_SERVER_ERROR,
         UserFetchError: status.HTTP_500_INTERNAL_SERVER_ERROR,
         PasswordUpdateError: status.HTTP_500_INTERNAL_SERVER_ERROR,
+
+        # ============= Token ================
+        TokenExpiredError: status.HTTP_401_UNAUTHORIZED,
+        InvalidTokenError: status.HTTP_401_UNAUTHORIZED,
     }
 
     # Register each exception → response handler

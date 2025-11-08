@@ -26,7 +26,7 @@ class FactoryAlreadyExistsError(FactoryError):
     """Raised when a factory conflicts with existing records (e.g., same name/location)."""
     def __init__(self, message=None):
         if message is None:
-            message = "A factory with the same name or location already exists."
+            message = "A factory with the same name already exists."
         super().__init__(message)
 
 

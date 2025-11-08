@@ -21,10 +21,10 @@ def get_user_by_phone_number_service(db: Session, phone_number: str):
 
     except Exception as e:
         # Wrap any DB/ORM exception in a custom operation error
-        raise UserFetchError(f"Failed to fetch user")
+        raise UserFetchError()
 
     # Check if user exists
     if user is None:
-        raise PhoneNumberDoesNotExistError(f"Failed to fetch user")
+        raise PhoneNumberDoesNotExistError()
 
     return user

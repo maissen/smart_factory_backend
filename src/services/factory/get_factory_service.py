@@ -18,11 +18,11 @@ def get_factory_by_id_service(db: Session, factory_id: int) -> Factory:
 
     # ID validation
     if not isinstance(factory_id, int):
-        raise InvalidFactoryIdError("Factory ID must be an integer.")
+        raise InvalidFactoryIdError()
 
     factory = get_factory_by_id_crud(db, factory_id)
     if not factory:
-        raise FactoryNotFoundError("Factory is not found.")
+        raise FactoryNotFoundError()
     return factory
 
 
@@ -38,7 +38,7 @@ def get_factory_of_user_service(
 ):
     # Validate user_id
     if not isinstance(user_id, int):
-        raise InvalidUserIdError("User ID must be an integer.")
+        raise InvalidUserIdError()
 
     # Ensure user exists
     user = get_user_by_id_service(db, user_id)
@@ -48,6 +48,6 @@ def get_factory_of_user_service(
         factory = get_factory_by_owner_crud(db, user_id)
 
     except:
-        raise FactoryNotFoundError("User does not have a factory.")
+        raise FactoryNotFoundError()
 
     return factory

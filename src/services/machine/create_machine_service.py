@@ -28,20 +28,20 @@ def create_machine_service(
     """Service to create a new machine."""
 
     if not is_valid_str(name):
-        raise MachineInvalidNameError("Machine name is required.")
+        raise MachineInvalidNameError()
     name = normalize_str(name)
 
     machine_by_name = get_machine_by_name_service(db=db, name=name, raise_if_not_found=False)
     if machine_by_name:
-        raise MachineNameAlreadyExistsError("Another machine with this name already exists.")
+        raise MachineNameAlreadyExistsError()
 
     if not is_valid_str(serial_number):
-        raise MachineInvalidSerialNumberError("Serial number is required.")
+        raise MachineInvalidSerialNumberError()
     serial_number = normalize_str(serial_number)
 
     machine_by_serial_nb = get_machine_by_serial_service(db=db, serial_number=serial_number, raise_if_not_found=False)
     if machine_by_serial_nb:
-        raise MachineSerialNumberAlreadyExistsError("Another machine with this serial number exists.")
+        raise MachineSerialNumberAlreadyExistsError()
     
     if status not in settings.MACHINE_POSSIBLE_STATUS:
         raise InvalidMachineStatusError(f"Invalid status, possible statuses are : {settings.MACHINE_POSSIBLE_STATUS}")
@@ -59,12 +59,12 @@ def create_machine_service(
         
     except IntegrityError as e:
         if "machines_name_key" in str(e.orig):
-            raise MachineNameAlreadyExistsError(f"Machine name already exists.")
+            raise MachineNameAlreadyExistsError()
         elif "machines_serial_number_key" in str(e.orig):
-            raise MachineSerialNumberAlreadyExistsError(f"Serial number already exists.")
+            raise MachineSerialNumberAlreadyExistsError()
         else:
             print(e)
-            raise MachineError(f"Unexpected database error")
+            raise MachineError()
 
     return new_machine
 

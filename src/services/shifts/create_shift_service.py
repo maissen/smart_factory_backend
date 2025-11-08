@@ -32,14 +32,14 @@ def create_shift_service(
     """
 
     if not is_valid_str(name):
-        raise ShiftNameIsInvalidError("Shift name must be a non-empty valid string.")
+        raise ShiftNameIsInvalidError()
     
     # Validate time input
     if not isinstance(start_time, time):
-        raise ShiftStartTimeIsInvalidError("Shift start_time must be a valid time object.")
+        raise ShiftStartTimeIsInvalidError()
 
     if not isinstance(end_time, time):
-        raise ShiftEndTimeIsInvalidError("Shift end_time must be a valid time object.")
+        raise ShiftEndTimeIsInvalidError()
 
     factory = db.query(Factory).filter(Factory.id == factory_id).first()
     if factory is None:
@@ -49,7 +49,7 @@ def create_shift_service(
 
     existing = check_if_factory_has_shift_service(db=db, factory_id=factory_id, current_user=current_user)
     if existing:
-        raise ShiftAlreadyExistsError("Factory already has a shift.")
+        raise ShiftAlreadyExistsError()
 
     validate_time_range(start_time, end_time)
 

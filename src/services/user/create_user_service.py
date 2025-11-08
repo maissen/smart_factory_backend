@@ -35,7 +35,7 @@ def create_user_service(
 
     # Validate full_name
     if not is_valid_str(full_name):
-        raise InvalidFullNameError("Full name is required.")
+        raise InvalidFullNameError()
 
     full_name = normalize_str(full_name)
 
@@ -47,11 +47,11 @@ def create_user_service(
     # Check conflicts (404 getter services likely return None if not found)
     existing_email_user = get_user_by_email_optional_service(db=db, email=validated_email)
     if existing_email_user:
-        raise EmailAlreadyExistsError(f"Email is already in use.")
+        raise EmailAlreadyExistsError()
 
     existing_phone_user = get_user_by_phone_number_optional_service(db=db, phone_number=validated_phone)
     if existing_phone_user:
-        raise PhoneNumberAlreadyExistsError(f"Phone number is already in use.")
+        raise PhoneNumberAlreadyExistsError()
     
 
     # check user's role
@@ -70,6 +70,6 @@ def create_user_service(
 
     except Exception as e:
         # Any unexpected/db-level errors map to HTTP 500
-        raise UserCreationError(f"Unexpected error while creating user: {e}")
+        raise UserCreationError()
 
     return new_user

@@ -22,7 +22,7 @@ def get_all_users_service(db: Session, role: str | None):
 
     if role is not None: # None if the role is not passed to the service
         if not is_valid_str(role):
-            raise InvalidRoleError("Role must be a non-empty string.")
+            raise InvalidRoleError()
 
         if role not in settings.USER_ALLOWED_ROLES:
             raise InvalidRoleError(f"Role is not allowed. Allowed roles: {settings.USER_ALLOWED_ROLES}")
@@ -33,4 +33,4 @@ def get_all_users_service(db: Session, role: str | None):
 
     except Exception as exc:
         # Bubble the underlying DB issue inside UserFetchError
-        raise UserFetchError(f"Failed to fetch users")
+        raise UserFetchError()
