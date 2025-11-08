@@ -4,8 +4,10 @@ from sqlalchemy.orm import Session
 
 from src.models.shifts_model import Shift
 from src.services.shifts.get_shift_service import get_shift_by_id_service
+from src.services.factory.get_factory_service import get_factory_of_user_service
 
 from src.db_crud.shift.update_shift_crud import update_shift_crud
+from src.helpers.factory import assert_factory_access
 from src.exceptions.shifts_exceptions import (
     ShiftNotFoundError,
 )
@@ -24,6 +26,9 @@ def update_shift_service(
     """
     try:
         shift = get_shift_by_id_service(db=db, shift_id=shift_id, current_user=current_user)
+        factory = get_factory_of_user_service(db=db, user_id=current_user.id)
+
+        assert_factory_access(factory=factory, current_user=current_user)
 
     except ShiftNotFoundError as e:
         raise ShiftNotFoundError(e)

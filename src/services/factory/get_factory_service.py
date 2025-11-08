@@ -35,7 +35,6 @@ def list_factories_service(db: Session, admin: bool, user_id: int = None) -> lis
 def get_factory_of_user_service(
     db: Session,
     user_id: int,
-    raise_if_empty: bool = False
 ):
     # Validate user_id
     if not isinstance(user_id, int):

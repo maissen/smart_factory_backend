@@ -8,6 +8,12 @@ class ShiftCreateSchema(BaseModel):
     end_time: time
 
 
+class ShiftUpdateSchema(BaseModel):
+    name: str
+    start_time: time
+    end_time: time
+
+
 class ShiftResponseSchema(BaseModel):
     id: int
     factory_id: int

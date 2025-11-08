@@ -12,7 +12,7 @@ def assert_factory_access(factory: Factory, current_user):
     if current_user.role == settings.USER_ALLOWED_ROLES[0]: # admin
         return
 
-    if current_user.role == settings.USER_ALLOWED_ROLES[0] and factory.owner_id == current_user.id:
+    if current_user.role == settings.USER_ALLOWED_ROLES[1] and factory.owner_id == current_user.id:
         return
 
     raise ShiftPermissionError("You're not authorized to perform this action.")
