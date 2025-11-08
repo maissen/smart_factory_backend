@@ -39,6 +39,9 @@ class Settings(BaseSettings):
     DEFAULT_ERROR_MESSAGE: str
     MIN_PASSWORD_LENGTH: int
     MIN_PHONE_NUMBER_LENGTH: int
+
+    # machines config
+    MACHINE_POSSIBLE_STATUS: list = ["Running", "Idle", "Maintenance", "Stopped"]
     
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
