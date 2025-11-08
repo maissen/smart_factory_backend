@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from datetime import date
+from datetime import datetime
 
 class MachineCreateRequestSchema(BaseModel):
     name: str
@@ -20,8 +20,8 @@ class MachineResponseSchema(BaseModel):
     serial_number: str
     status: str
     description: str
-    last_maintenance_date: date
-    created_at: date
-    updated_at: date
+    last_maintenance_date: datetime
+    created_at: datetime
+    updated_at: datetime
 
 
