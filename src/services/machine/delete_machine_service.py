@@ -1,22 +1,24 @@
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
 
-from src.db_crud.machine.machine_crud import delete_machine_crud, get_factory_machines_crud
+from src.db_crud.machine.machine_crud import delete_machine_crud
 from src.services.machine.get_machine_service import get_all_factory_machines_service
 from src.exceptions.user_exceptions import UserAuthorizationError
 from src.exceptions.machine_exceptions import (
     MachineNotFoundError,
     MachineAccessDeniedError
 )
-from src.helpers.str_helpers import is_valid_str, normalize_str
 from src.services.factory.get_factory_service import get_factory_of_user_service
 
 
 
-def delete_machine_service(db: Session, machine_id: int, factory_id: int, user_id: int):
+def delete_machine_service(db: Session, machine_id: int, user_id: int):
     """Service to delete a machine by ID."""
 
-    machines = get_all_factory_machines_service(db=db, machine_id=machine_id)
+    factory = get_factory_of_user_service(db=db, user_id=user_id)
+    if factory.owner_id != user_id:
+        raise UserAuthorizationError("You're not authorized to perform this action.")
+    
+    machines = get_all_factory_machines_service(db=db, factory_id=factory.id, user_id=user_id)
     machine = None
     for m in machines:
         if m.id == machine_id:
@@ -24,12 +26,8 @@ def delete_machine_service(db: Session, machine_id: int, factory_id: int, user_i
             break
     else:
         raise MachineNotFoundError(f"Machine with ID {machine_id} not found.")
-
-    factory = get_factory_of_user_service(db=db, user_id=user_id)
-    if not factory.owner_id != user_id:
-        raise UserAuthorizationError("You're not authorized to perform this action.")
-
-    if machine.factory_id != factory_id:
+    
+    if machine.factory_id != factory.id:
         raise MachineAccessDeniedError("You cannot update a machine from another factory.")
 
     deleted_machine = delete_machine_crud(db=db, machine_id=machine_id)
