@@ -21,3 +21,15 @@ class ShiftPermissionError(ShiftError):
 class ShiftTimeRangeError(ShiftError):
     """Raised when the shift start time is later than the end time."""
     pass
+
+class ShiftNameIsInvalidError(ShiftError):
+    "Raised when shift's name is invalid"
+    pass
+
+class ShiftStartTimeIsInvalidError(ShiftError):
+    "Raised when shift's name is invalid"
+    pass
+
+class ShiftEndTimeIsInvalidError(ShiftError):
+    "Raised when shift's name is invalid"
+    pass

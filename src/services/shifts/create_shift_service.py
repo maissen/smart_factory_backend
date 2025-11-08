@@ -7,12 +7,15 @@ from src.models.factory_model import Factory
 from src.models.shifts_model import Shift
 
 from src.db_crud.shift.create_shift_crud import create_shift_crud
-from src.db_crud.shift.get_shift_crud import get_shift_by_factory_id_crud
 from src.services.shifts.get_shift_service import check_if_factory_has_shift_service
+from src.helpers.str_helpers import is_valid_str
 
 from src.exceptions.shifts_exceptions import (
     ShiftNotFoundError,
     ShiftAlreadyExistsError,
+    ShiftNameIsInvalidError,
+    ShiftStartTimeIsInvalidError,
+    ShiftEndTimeIsInvalidError
 )
 
 
@@ -27,6 +30,17 @@ def create_shift_service(
     """
     Create a shift for a factory.
     """
+
+    if not is_valid_str(name):
+        raise ShiftNameIsInvalidError("Shift name must be a non-empty valid string.")
+    
+    # Validate time input
+    if not isinstance(start_time, time):
+        raise ShiftStartTimeIsInvalidError("Shift start_time must be a valid time object.")
+
+    if not isinstance(end_time, time):
+        raise ShiftEndTimeIsInvalidError("Shift end_time must be a valid time object.")
+
     factory = db.query(Factory).filter(Factory.id == factory_id).first()
     if factory is None:
         raise ShiftNotFoundError(factory_id)

@@ -6,7 +6,7 @@ from src.dependencies.postgres_dependency import get_db
 from src.services.shifts.update_shift_service import update_shift_service
 from src.schema.shift_schema import ShiftUpdateSchema, ShiftResponseSchema
 from src.dependencies.get_current_user_dependency import get_current_user
-from src.exceptions.shifts_exceptions import ShiftError
+from src.exceptions.shifts_exceptions import ShiftEndTimeIsInvalidError, ShiftError, ShiftNameIsInvalidError, ShiftNotFoundError, ShiftStartTimeIsInvalidError
 
 router = APIRouter()
 
@@ -32,8 +32,21 @@ def update_shift(
         )
         return updated_shift
 
+    except ShiftNotFoundError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+
+    except ShiftNameIsInvalidError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+    except ShiftStartTimeIsInvalidError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+    except ShiftEndTimeIsInvalidError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
     except ShiftError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e),
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="An unexpected error occurred while updating the shift.")

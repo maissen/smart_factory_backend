@@ -8,9 +8,12 @@ from src.services.shifts.create_shift_service import create_shift_service
 
 from src.schema.shift_schema import ShiftCreateSchema, ShiftResponseSchema
 from src.exceptions.shifts_exceptions import (
+    ShiftEndTimeIsInvalidError,
+    ShiftNameIsInvalidError,
     ShiftNotFoundError,
     ShiftAlreadyExistsError,
     ShiftPermissionError,
+    ShiftStartTimeIsInvalidError,
     ShiftTimeRangeError,
 )
 
@@ -47,9 +50,19 @@ def create_shift_route(
     except ShiftPermissionError as e:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(e))
     
+    except ShiftNameIsInvalidError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    
+    except ShiftStartTimeIsInvalidError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    
+    except ShiftEndTimeIsInvalidError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    
     except ShiftTimeRangeError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     
     except Exception as e:
         print(e)
-        raise HTTPException(status_code=500, detail="An error occured while creating your shift")
+        raise HTTPException(status_code=500, detail="An error occurred while creating your shift")
+
