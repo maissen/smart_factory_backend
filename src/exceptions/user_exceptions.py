@@ -1,9 +1,9 @@
 class UserError(Exception):
-    """
-    Base exception for all user-related errors.
-    All user service exceptions should inherit from this.
-    """
-    pass
+    """Base exception for all user-related errors."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "An unknown user error occurred."
+        super().__init__(message)
 
 
 # ============================================
@@ -11,28 +11,27 @@ class UserError(Exception):
 # ============================================
 
 class UserNotFoundError(UserError):
-    """
-    Raised when a user cannot be found by the specified identifier.
-    Maps to: HTTP 404
-    """
-    pass
+    """Raised when a user cannot be found."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "User could not be found."
+        super().__init__(message)
 
 
 class EmailDoesNotExistError(UserError):
-    """
-    Raised when a user lookup fails because the specified email does not exist.
-    Maps to: HTTP 404
-    """
-    pass
+    """Raised when an email does not exist in the system."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Email does not exist."
+        super().__init__(message)
 
 
 class PhoneNumberDoesNotExistError(UserError):
-    """
-    Raised when a user lookup fails because the specified phone number does not exist.
-    Maps to: HTTP 404
-    """
-    pass
-
+    """Raised when a phone number does not exist in the system."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Phone number does not exist."
+        super().__init__(message)
 
 
 # ============================================
@@ -40,60 +39,67 @@ class PhoneNumberDoesNotExistError(UserError):
 # ============================================
 
 class UserValidationError(UserError):
-    """
-    Base class for all input validation errors.
-    Maps to: HTTP 400
-    """
-    pass
+    """Raised for invalid user input or validation failure."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Invalid user input."
+        super().__init__(message)
 
 
 class InvalidUserIdError(UserValidationError):
-    """
-    Raised when user_id is not a positive integer.
-    """
-    pass
+    """Raised when the user ID is invalid."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "User ID must be a positive integer."
+        super().__init__(message)
 
 
 class InvalidFullNameError(UserValidationError):
-    """
-    Raised when full_name is empty or invalid.
-    """
-    pass
+    """Raised when the full name is empty or invalid."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Full name is empty or invalid."
+        super().__init__(message)
 
 
 class InvalidEmailError(UserValidationError):
-    """
-    Raised when email format is invalid or empty.
-    """
-    pass
+    """Raised when the email format is invalid."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Email format is invalid or empty."
+        super().__init__(message)
 
 
 class InvalidPasswordError(UserValidationError):
-    """
-    Raised when password doesn't meet security requirements.
-    """
-    pass
+    """Raised when the password does not meet requirements."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Password does not meet security requirements."
+        super().__init__(message)
 
 
 class InvalidPhoneNumberError(UserValidationError):
-    """
-    Raised when phone number format is invalid.
-    """
-    pass
+    """Raised when the phone number format is invalid."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Phone number format is invalid."
+        super().__init__(message)
 
 
 class InvalidRoleError(UserValidationError):
-    """
-    Raised when role is invalid or doesn't exist.
-    """
-    pass
+    """Raised when the role is invalid or non-existent."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Role is invalid or does not exist."
+        super().__init__(message)
 
 
 class EmptyRoleError(UserValidationError):
-    """
-    Raised when role is an empty string.
-    """
-    pass
+    """Raised when the role field is empty."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Role cannot be empty."
+        super().__init__(message)
 
 
 # ============================================
@@ -101,25 +107,27 @@ class EmptyRoleError(UserValidationError):
 # ============================================
 
 class UserConflictError(UserError):
-    """
-    Base class for resource conflict errors.
-    Maps to: HTTP 409
-    """
-    pass
+    """Raised when there is a resource conflict."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Resource conflict error."
+        super().__init__(message)
 
 
 class EmailAlreadyExistsError(UserConflictError):
-    """
-    Raised when attempting to create/update a user with an email that already exists.
-    """
-    pass
+    """Raised when the email already exists in the system."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Email already exists."
+        super().__init__(message)
 
 
 class PhoneNumberAlreadyExistsError(UserConflictError):
-    """
-    Raised when attempting to create/update a user with a phone number that already exists.
-    """
-    pass
+    """Raised when the phone number already exists in the system."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Phone number already exists."
+        super().__init__(message)
 
 
 # ============================================
@@ -127,32 +135,35 @@ class PhoneNumberAlreadyExistsError(UserConflictError):
 # ============================================
 
 class UserAuthenticationError(UserError):
-    """
-    Base class for authentication-related errors.
-    Maps to: HTTP 401
-    """
-    pass
+    """Raised when authentication fails."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Authentication failed."
+        super().__init__(message)
 
 
 class IncorrectPasswordError(UserAuthenticationError):
-    """
-    Raised when old password doesn't match during password update.
-    """
-    pass
+    """Raised when the provided password is incorrect."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Incorrect password."
+        super().__init__(message)
 
 
 class UserAuthorizationError(UserError):
-    """
-    Raised when the user is not authorized to perform a specific action
-    """
-    pass
+    """Raised when the user is not authorized for an action."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "User is not authorized."
+        super().__init__(message)
 
 
 class MissingPasswordError(UserValidationError):
-    """
-    Raised when old password is not provided during password update.
-    """
-    pass
+    """Raised when the password is missing."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Password is missing."
+        super().__init__(message)
 
 
 # ============================================
@@ -160,47 +171,51 @@ class MissingPasswordError(UserValidationError):
 # ============================================
 
 class UserOperationError(UserError):
-    """
-    Raised when an unexpected internal error occurs during user operations.
-    This typically indicates a database failure or unexpected system error.
-    Maps to: HTTP 500
-    """
-    pass
+    """Raised for internal errors during user operations."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "An internal user operation error occurred."
+        super().__init__(message)
 
 
 class UserCreationError(UserOperationError):
-    """
-    Raised when user creation fails due to internal errors.
-    """
-    pass
+    """Raised when creating a user fails internally."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "User creation failed due to internal error."
+        super().__init__(message)
 
 
 class UserUpdateError(UserOperationError):
-    """
-    Raised when user update fails due to internal errors.
-    """
-    pass
+    """Raised when updating a user fails internally."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "User update failed due to internal error."
+        super().__init__(message)
 
 
 class UserDeletionError(UserOperationError):
-    """
-    Raised when user deletion fails due to internal errors.
-    """
-    pass
+    """Raised when deleting a user fails internally."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "User deletion failed due to internal error."
+        super().__init__(message)
 
 
 class UserFetchError(UserOperationError):
-    """
-    Raised when fetching user(s) fails due to internal errors.
-    """
-    pass
+    """Raised when fetching users fails internally."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Fetching user(s) failed due to internal error."
+        super().__init__(message)
 
 
 class PasswordUpdateError(UserOperationError):
-    """
-    Raised when password update fails due to internal errors.
-    """
-    pass
+    """Raised when updating a password fails internally."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "Password update failed due to internal error."
+        super().__init__(message)
 
 
 # ============================================
@@ -208,8 +223,8 @@ class PasswordUpdateError(UserOperationError):
 # ============================================
 
 class UserNotAllowedError(UserError):
-    """
-    Raised when a user is not allowed to perform an action.
-    Maps to: HTTP 403
-    """
-    pass
+    """Raised when the user is not allowed to perform an action."""
+    def __init__(self, message=None):
+        if message is None:
+            message = "User is not allowed to perform this action."
+        super().__init__(message)
