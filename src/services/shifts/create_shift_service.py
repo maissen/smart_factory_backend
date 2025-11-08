@@ -12,7 +12,6 @@ from src.db_crud.shift.get_shift_crud import get_shift_by_factory_id_crud
 from src.exceptions.shifts_exceptions import (
     ShiftNotFoundError,
     ShiftAlreadyExistsError,
-    ShiftPermissionError,
 )
 
 

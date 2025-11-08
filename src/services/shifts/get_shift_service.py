@@ -42,7 +42,7 @@ def check_if_factory_has_shift_service(db: Session, factory_id: int, current_use
     """
 
     try:
-        factory = get_shift_of_factory_service()
+        factory = get_shift_of_factory_service(db=db, factory_id=factory_id, current_user=current_user)
     except:
         return False
     
