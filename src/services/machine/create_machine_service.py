@@ -11,6 +11,7 @@ from src.exceptions.machine_exceptions import (
     MachineInvalidSerialNumberError
 )
 from src.helpers.str_helpers import is_valid_str, normalize_str
+from src.services.machine.get_machine_service import get_machine_by_serial_service, get_machine_by_name_service
 
 from src.core.settings import settings
 
@@ -30,10 +31,18 @@ def create_machine_service(
         raise MachineInvalidNameError("Machine name is required.")
     name = normalize_str(name)
 
+    machine_by_name = get_machine_by_name_service(db=db, name=name, raise_if_not_found=False)
+    if machine_by_name:
+        raise MachineNameAlreadyExistsError("Another machine with this name already exists.")
+
     if not is_valid_str(serial_number):
         raise MachineInvalidSerialNumberError("Serial number is required.")
     serial_number = normalize_str(serial_number)
 
+    machine_by_serial_nb = get_machine_by_serial_service(db=db, serial_number=serial_number, raise_if_not_found=False)
+    if machine_by_serial_nb:
+        raise MachineSerialNumberAlreadyExistsError("Another machine with this serial number exists.")
+    
     if status not in settings.MACHINE_POSSIBLE_STATUS:
         raise InvalidMachineStatusError(f"Invalid status, possible statuses are : {settings.MACHINE_POSSIBLE_STATUS}")
 

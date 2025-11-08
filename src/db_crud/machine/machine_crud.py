@@ -77,3 +77,21 @@ def delete_machine_crud(
 
     db.delete(machine)
     db.commit()
+
+
+def get_machine_by_serial_crud(db: Session, serial_number: str) -> Machine | None:
+    """
+    Retrieve a machine by its serial number.
+
+    Returns None if not found.
+    """
+    return db.query(Machine).filter(Machine.serial_number == serial_number).first()
+
+
+def get_machine_by_name_crud(db: Session, name: str) -> Machine | None:
+    """
+    Retrieve a machine by its name.
+
+    Returns None if not found.
+    """
+    return db.query(Machine).filter(Machine.name == name).first()

@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
-from src.db_crud.machine.machine_crud import get_factory_machines_crud
+from src.db_crud.machine.machine_crud import get_factory_machines_crud, get_machine_by_name_crud, get_machine_by_serial_crud
 from src.exceptions.machine_exceptions import (
-    MachineFetchError
+    MachineFetchError,
+    MachineNotFoundError
 )
 from src.exceptions.user_exceptions import UserAuthorizationError
 
@@ -33,3 +34,47 @@ def get_all_factory_machines_service(db: Session, user_id: int, factory_id: int 
         raise MachineFetchError("An error occured while fetching machines.")
 
     return machines
+
+
+def get_machine_by_serial_service(
+    db: Session,
+    serial_number: str,
+    raise_if_not_found: bool = True
+):
+    """
+    Get a machine by serial number.
+    
+    Parameters:
+        db: SQLAlchemy session
+        serial_number: Serial number to search for
+        raise_if_not_found: If True, raises MachineNotFoundError when not found; 
+        otherwise returns None
+    """
+    machine = get_machine_by_serial_crud(db=db, serial_number=serial_number)
+    
+    if not machine and raise_if_not_found:
+        raise MachineNotFoundError(f"Machine with serial number '{serial_number}' not found.")
+    
+    return machine
+
+
+def get_machine_by_name_service(
+    db: Session,
+    name: str,
+    raise_if_not_found: bool = True
+):
+    """
+    Get a machine by name.
+
+    Parameters:
+        db: SQLAlchemy session
+        name: Machine name to search for
+        raise_if_not_found: If True, raises MachineNotFoundError when not found;
+                            otherwise returns None
+    """
+    machine = get_machine_by_name_crud(db=db, name=name)
+
+    if not machine and raise_if_not_found:
+        raise MachineNotFoundError(f"Machine with name '{name}' not found.")
+
+    return machine
