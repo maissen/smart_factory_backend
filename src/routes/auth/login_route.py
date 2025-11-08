@@ -18,18 +18,3 @@ def login_user(user: TokenLoginRequest, db: Session = Depends(get_db)):
         password=user.password
     )
     return token_response
-    # try:
-
-    # except UserAuthenticationError as e:
-    #     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(e))
-    
-    # except IncorrectPasswordError as e:
-    #     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(e))
-    
-    # except EmailDoesNotExistError as e:
-    #     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
-    
-    # except Exception as e:
-    #     # Catch-all for unexpected errors
-    #     print(e)
-    #     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Unexpected error happened.")

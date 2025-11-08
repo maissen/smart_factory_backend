@@ -32,7 +32,7 @@ def update_user(
 ):
     # Prevent updating another user's profile (unless for admin users)
     if current_user.role != settings.USER_ALLOWED_ROLES[0] and current_user.id != user_id:
-        raise UserNotAllowedError("You are not allowed to update someone else's credentials.")
+        raise UserNotAllowedError()
 
     # Perform update
     updated_user = update_user_service(
@@ -44,26 +44,4 @@ def update_user(
     )
     return updated_user
 
-    try:
-        pass
-
-    except UserNotAllowedError as e:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(e))
-
-    except InvalidUserIdError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
-
-    except InvalidFullNameError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
-
-    except EmailAlreadyExistsError as e:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))
-
-    except PhoneNumberAlreadyExistsError as e:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))
-
-    except UserUpdateError as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Unexpected server error")
+    

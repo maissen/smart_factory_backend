@@ -47,10 +47,10 @@ class FactoryDeleteError(FactoryError):
 
 
 class FactoryPermissionError(FactoryError):
-    """Raised when user does not have permission to modify this factory."""
+    """Raised when user does not have permission to access this factory."""
     def __init__(self, message=None):
         if message is None:
-            message = "You do not have permission to modify this factory."
+            message = "You do not have permission to access this factory."
         super().__init__(message)
 
 

@@ -27,39 +27,16 @@ def update_password(
     payload: UserUpdatePasswordRequest,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
+    response_model=204
 ):
 
-    try:
-        # Ensure users can only change their own password unless admin privilege exists
-        if current_user.id != user_id and current_user.role != settings.USER_ALLOWED_ROLES[0]:
-            raise UserNotAllowedError("You do not have permission to change another user's password.")
-        
-        update_password_service(
-            db=db,
-            user_id=user_id,
-            old_password=payload.old_password,
-            new_password=payload.new_password
-        )
-
-        return {"message": "Password updated successfully"}
-
-    except InvalidUserIdError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
-
-    except MissingPasswordError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    # Ensure users can only change their own password unless admin privilege exists
+    if current_user.id != user_id and current_user.role != settings.USER_ALLOWED_ROLES[0]:
+        raise UserNotAllowedError()
     
-    except InvalidPasswordError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
-
-    except IncorrectPasswordError as e:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(e))
-
-    except PasswordUpdateError as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-    
-    except UserNotAllowedError as e:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(e))
-
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Unexpected server error")
+    update_password_service(
+        db=db,
+        user_id=user_id,
+        old_password=payload.old_password,
+        new_password=payload.new_password
+    )

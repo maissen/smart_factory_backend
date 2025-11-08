@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from datetime import time
 
@@ -6,7 +6,6 @@ from src.dependencies.postgres_dependency import get_db
 from src.services.shifts.update_shift_service import update_shift_service
 from src.schema.shift_schema import ShiftUpdateSchema, ShiftResponseSchema
 from src.dependencies.get_current_user_dependency import get_current_user
-from src.exceptions.shifts_exceptions import ShiftEndTimeIsInvalidError, ShiftError, ShiftNameIsInvalidError, ShiftNotFoundError, ShiftStartTimeIsInvalidError
 
 router = APIRouter()
 
@@ -21,32 +20,12 @@ def update_shift(
     Update a shift by its ID.
     Only the factory owner (client) or admin can update a shift.
     """
-    try:
-        updated_shift = update_shift_service(
-            db=db,
-            shift_id=shift_id,
-            name=shift_data.name,
-            start_time=shift_data.start_time,
-            end_time=shift_data.end_time,
-            current_user=current_user,
-        )
-        return updated_shift
-
-    except ShiftNotFoundError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
-
-    except ShiftNameIsInvalidError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
-
-    except ShiftStartTimeIsInvalidError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
-
-    except ShiftEndTimeIsInvalidError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
-
-    except ShiftError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
-
-    except Exception as e:
-        print(e)
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="An unexpected error occurred while updating the shift.")
+    updated_shift = update_shift_service(
+        db=db,
+        shift_id=shift_id,
+        name=shift_data.name,
+        start_time=shift_data.start_time,
+        end_time=shift_data.end_time,
+        current_user=current_user,
+    )
+    return updated_shift
