@@ -39,20 +39,14 @@ def get_all_factory_machines_service(db: Session, user_id: int, factory_id: int 
 def get_machine_by_serial_service(
     db: Session,
     serial_number: str,
-    raise_if_not_found: bool = True
+    raise_err: bool = True
 ):
     """
     Get a machine by serial number.
-    
-    Parameters:
-        db: SQLAlchemy session
-        serial_number: Serial number to search for
-        raise_if_not_found: If True, raises MachineNotFoundError when not found; 
-        otherwise returns None
     """
     machine = get_machine_by_serial_crud(db=db, serial_number=serial_number)
     
-    if not machine and raise_if_not_found:
+    if not machine and raise_err:
         raise MachineNotFoundError()
     
     return machine
@@ -61,20 +55,14 @@ def get_machine_by_serial_service(
 def get_machine_by_name_service(
     db: Session,
     name: str,
-    raise_if_not_found: bool = True
+    raise_err: bool = True
 ):
     """
     Get a machine by name.
-
-    Parameters:
-        db: SQLAlchemy session
-        name: Machine name to search for
-        raise_if_not_found: If True, raises MachineNotFoundError when not found;
-        otherwise returns None
     """
     machine = get_machine_by_name_crud(db=db, name=name)
 
-    if not machine and raise_if_not_found:
+    if not machine and raise_err:
         raise MachineNotFoundError()
 
     return machine
