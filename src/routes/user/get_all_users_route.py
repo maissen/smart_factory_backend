@@ -4,6 +4,7 @@ from src.dependencies.postgres_dependency import get_db
 from src.services.user.get_all_users_service import get_all_users_service
 from src.schema.user_schema import UserResponse
 from src.dependencies.get_current_user_dependency import get_current_user
+from src.dependencies.admin_dependency import require_admin
 
 router = APIRouter()
 
@@ -11,6 +12,7 @@ router = APIRouter()
 def get_all_users(
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user),
+    admin = Depends(require_admin),
     role=Query(default=None, description="Optional role to filter users by")
 ):
     """

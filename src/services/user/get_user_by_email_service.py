@@ -9,7 +9,7 @@ from src.exceptions.user_exceptions import (
 )
 
 
-def get_user_by_email_service(db: Session, email: str):
+def get_user_by_email_service(db: Session, email: str, raise_on_error: bool = True):
     """
     Service function to retrieve a user by email with domain-correct exceptions.
     
@@ -33,7 +33,7 @@ def get_user_by_email_service(db: Session, email: str):
         raise UserFetchError()
 
     # Not found → email does not exist (404)
-    if user is None:
+    if raise_on_error and user is None:
         raise EmailDoesNotExistError()
 
     return user

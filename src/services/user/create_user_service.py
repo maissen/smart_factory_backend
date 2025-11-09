@@ -9,8 +9,8 @@ from src.helpers.str_helpers import (
     normalize_str,
     validate_role
 )
-from src.services.user.get_user_by_email_optional_service import get_user_by_email_optional_service
-from src.services.user.get_user_by_phone_number_optional_service import get_user_by_phone_number_optional_service
+from src.services.user.get_user_by_email_service import get_user_by_email_service
+from src.services.user.get_user_by_phone_number_service import get_user_by_phone_number_service
 
 from src.exceptions.user_exceptions import (
     InvalidFullNameError,
@@ -44,12 +44,12 @@ def create_user_service(
     validated_password = validate_password(password)
     validated_phone = validate_phone_number(phone_number)
 
-    # Check conflicts (404 getter services likely return None if not found)
-    existing_email_user = get_user_by_email_optional_service(db=db, email=validated_email)
+    # Check if someone else has the email
+    existing_email_user = get_user_by_email_service(db=db, email=validated_email, raise_on_error=False)
     if existing_email_user:
         raise EmailAlreadyExistsError()
 
-    existing_phone_user = get_user_by_phone_number_optional_service(db=db, phone_number=validated_phone)
+    existing_phone_user = get_user_by_phone_number_service(db=db, phone_number=validated_phone)
     if existing_phone_user:
         raise PhoneNumberAlreadyExistsError()
     

@@ -24,13 +24,11 @@ def get_all_users_service(db: Session, role: str | None):
         if not is_valid_str(role):
             raise InvalidRoleError()
 
-        if role not in settings.USER_ALLOWED_ROLES:
-            raise InvalidRoleError(f"Role is not allowed. Allowed roles: {settings.USER_ALLOWED_ROLES}")
-
     try:
         users = get_all_users_crud(db, role)
         return users
 
     except Exception as exc:
         # Bubble the underlying DB issue inside UserFetchError
+        print(exec)
         raise UserFetchError()

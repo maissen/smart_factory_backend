@@ -1,22 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from src.dependencies.postgres_dependency import get_db
 from src.dependencies.get_current_user_dependency import get_current_user
-
-from src.services.user.get_user_by_email_optional_service import get_user_by_email_optional_service
-from src.services.user.get_user_by_phone_number_optional_service import get_user_by_phone_number_optional_service
 
 from src.schema.user_schema import UserUpdateRequest, UserResponse
 from src.services.user.update_user_service import update_user_service
 from src.core.settings import settings
 
 from src.exceptions.user_exceptions import (
-    InvalidUserIdError,
-    InvalidFullNameError,
-    EmailAlreadyExistsError,
-    PhoneNumberAlreadyExistsError,
-    UserUpdateError,
     UserNotAllowedError
 )
 

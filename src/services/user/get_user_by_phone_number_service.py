@@ -7,7 +7,7 @@ from src.exceptions.user_exceptions import (
 )
 
 
-def get_user_by_phone_number_service(db: Session, phone_number: str):
+def get_user_by_phone_number_service(db: Session, phone_number: str, raise_on_error: bool = True):
     """
     Service function to retrieve a user by phone number.
     """
@@ -24,7 +24,7 @@ def get_user_by_phone_number_service(db: Session, phone_number: str):
         raise UserFetchError()
 
     # Check if user exists
-    if user is None:
+    if raise_on_error and user is None:
         raise PhoneNumberDoesNotExistError()
 
     return user
