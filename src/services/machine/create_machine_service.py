@@ -5,6 +5,7 @@ from src.exceptions.machine_exceptions import *
 from src.helpers.str_helpers import is_valid_str, normalize_str
 from src.services.machine.get_machine_service import get_machine_by_serial_service, get_machine_by_name_service
 from src.services.factory.get_factory_service import get_factory_of_user_service
+from src.services.machine.launch_vm_as_container import launch_vm_container
 from src.core.settings import settings
 
 
@@ -38,6 +39,8 @@ def create_machine_service(
     
     if status not in settings.MACHINE_POSSIBLE_STATUS:
         raise InvalidMachineStatusError(f"Invalid status, possible statuses are : {settings.MACHINE_POSSIBLE_STATUS}")
+    
+
 
     try:
         new_machine = create_machine_crud(
@@ -49,6 +52,9 @@ def create_machine_service(
             last_maintenance_date=last_maintenance_date,
             description=description
         )
+        
+        # create the vm agent using docker
+        launch_vm_container(machine_id=new_machine.id)
         
         return new_machine
         
