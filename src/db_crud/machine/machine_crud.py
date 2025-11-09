@@ -104,3 +104,7 @@ def get_machine_by_id_crud(db: Session, machine_id: int):
     Returns None if not found.
     """
     return db.query(Machine).filter(Machine.id == machine_id).first()
+
+
+def load_all_machines_crud(db: Session) -> list[Machine]:
+    return db.query(Machine).all()
