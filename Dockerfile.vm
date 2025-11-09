@@ -1,9 +1,0 @@
-FROM python:3.12-slim
-
-WORKDIR /app
-
-RUN pip install requests
-
-COPY vm_agent/virtual_machine_agent.py .
-
-CMD ["python", "virtual_machine_agent.py"]

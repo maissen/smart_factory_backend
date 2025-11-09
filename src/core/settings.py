@@ -35,9 +35,6 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 20160 # two weeks
 
 
-    # application configuration
-    PUSH_TS_DATA_PERIOD: int
-
     # machines config
     MACHINE_POSSIBLE_STATUS: list = ["Running", "Idle", "Maintenance", "Stopped"]
     

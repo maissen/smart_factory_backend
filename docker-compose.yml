@@ -37,14 +37,6 @@ services:
       retries: 3
       start_period: 5s
 
-  vm_agent:
-    build:
-      context: .
-      dockerfile: Dockerfile.vm
-    image: smartfactory_vm:latest
-    networks:
-      - smart_factory_network
-
   
 volumes:
   postgres_smart_factory_data:
