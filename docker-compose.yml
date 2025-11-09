@@ -10,7 +10,6 @@ services:
       - "${EXTERNAL_PORT}:8000"
     volumes:
       - .:/app
-      - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
     depends_on:
       - postgres_db
