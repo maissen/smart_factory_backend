@@ -36,11 +36,10 @@ class Settings(BaseSettings):
 
 
     # InfluxDB configuration
-    DOCKER_INFLUXDB_INIT_USERNAME: str
-    DOCKER_INFLUXDB_INIT_PASSWORD: str
-    DOCKER_INFLUXDB_INIT_ORG: str
-    DOCKER_INFLUXDB_INIT_BUCKET: str
-    DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: str
+    INFLUXDB_URL: str
+    INFLUXDB_TOKEN: str
+    INFLUXDB_ORG: str
+    INFLUXDB_BUCKET: str
 
 
     # machines config
