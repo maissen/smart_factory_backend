@@ -16,3 +16,10 @@ def assert_factory_access(factory: Factory, current_user):
         return
 
     raise ShiftPermissionError()
+
+
+from src.exceptions.factory_exceptions import InvalidFactoryIdError
+
+def validate_factory_id(factory_id: int):
+    if not isinstance(factory_id, int) or factory_id <= 0:
+        raise InvalidFactoryIdError()

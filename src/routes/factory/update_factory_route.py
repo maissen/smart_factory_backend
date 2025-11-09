@@ -17,20 +17,18 @@ from src.exceptions.factory_exceptions import (
 router = APIRouter()
 
 
-@router.put("/update/{factory_id}", response_model=FactoryResponse)
+@router.put("/update", response_model=FactoryResponse)
 def update_factory(
-    factory_id: int,
-    update_data: FactoryUpdateRequest,
+    payload: FactoryUpdateRequest,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
     # Perform the update
     factory = update_factory_service(
         db=db,
-        factory_id=factory_id,
         user_id=current_user.id,
-        name=update_data.name,
-        location=update_data.location,
-        description=update_data.description,
+        name=payload.name,
+        location=payload.location,
+        description=payload.description,
     )
     return factory

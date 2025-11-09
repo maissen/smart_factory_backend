@@ -7,38 +7,41 @@ from src.db_crud.factory.get_factory_crud import (
     get_factory_by_owner_crud,
     get_all_factories_crud,
 )
-from src.exceptions.factory_exceptions import (
-    FactoryNotFoundError,
-    InvalidFactoryIdError
-)
-from src.exceptions.user_exceptions import InvalidUserIdError
+from src.exceptions.factory_exceptions import *
+from src.helpers.validate_user_id import validate_user_id
+from src.helpers.factory import validate_factory_id
 
 
 def get_factory_by_id_service(db: Session, factory_id: int) -> Factory:
 
     # ID validation
-    if not isinstance(factory_id, int):
-        raise InvalidFactoryIdError()
+    validate_factory_id(factory_id)
 
-    factory = get_factory_by_id_crud(db, factory_id)
-    if not factory:
-        raise FactoryNotFoundError()
-    return factory
+    try:
+        factory = get_factory_by_id_crud(db, factory_id)
+        if not factory:
+            raise FactoryNotFoundError()
+        
+        return factory
+    
+    except Exception as e:
+        raise FactoryError("Failed to fetch factories.")
 
 
-def list_factories_service(db: Session, admin: bool, user_id: int = None) -> list[Factory]:
-    if admin:
+def list_factories_service(db: Session) -> list[Factory]:
+    try:
         return get_all_factories_crud(db)
-    return get_factory_by_owner_crud(db, user_id)
+    except:
+        raise FactoryError("An error occured while fetching factories.")
 
 
 def get_factory_of_user_service(
     db: Session,
     user_id: int,
+    raise_error: bool = True
 ):
     # Validate user_id
-    if not isinstance(user_id, int):
-        raise InvalidUserIdError()
+    validate_user_id(user_id)
 
     # Ensure user exists
     user = get_user_by_id_service(db, user_id)
@@ -48,6 +51,8 @@ def get_factory_of_user_service(
         factory = get_factory_by_owner_crud(db, user_id)
 
     except:
-        raise FactoryNotFoundError()
+        if raise_error:
+            raise FactoryNotFoundError()
+        return None
 
     return factory

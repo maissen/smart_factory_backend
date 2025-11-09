@@ -8,15 +8,22 @@ from src.exceptions.user_exceptions import (
     InvalidFullNameError,
     InvalidRoleError
 )
+from src.exceptions.string_exceptions import InvalidStringError
+from typing import Optional
 
 
+def is_valid_str(value: str, raise_on_error: bool = False, err_msg: Optional[str] = None) -> bool:
 
-def is_valid_str(value: str) -> bool:
-    """
-    Returns True if the given string is not None, not empty,
-    and not just whitespace.
-    """
-    return isinstance(value, str) and value.strip() != ""
+    is_valid = isinstance(value, str) and value.strip() != ""
+    if not is_valid:
+        if raise_on_error:
+            if err_msg:
+                raise InvalidStringError(err_msg)
+            raise InvalidStringError()
+        
+        return False
+    
+    return True 
 
 
 def normalize_str(value: str, error_msg: str = None) -> str:

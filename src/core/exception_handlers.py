@@ -7,6 +7,7 @@ from src.exceptions.machine_exceptions import *
 from src.exceptions.shifts_exceptions import *
 from src.exceptions.user_exceptions import *
 from src.exceptions.token_exceptions import *
+from src.exceptions.string_exceptions import *
 
 
 def register_exception_handlers(app):
@@ -77,6 +78,9 @@ def register_exception_handlers(app):
         # ============= Token ================
         TokenExpiredError: status.HTTP_401_UNAUTHORIZED,
         InvalidTokenError: status.HTTP_401_UNAUTHORIZED,
+
+        # ========== MACHINE ==========
+        InvalidStringError: status.HTTP_400_BAD_REQUEST
     }
 
     # Register each exception → response handler
