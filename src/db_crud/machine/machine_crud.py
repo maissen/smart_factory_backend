@@ -95,3 +95,12 @@ def get_machine_by_name_crud(db: Session, name: str) -> Machine | None:
     Returns None if not found.
     """
     return db.query(Machine).filter(Machine.name == name).first()
+
+
+def get_machine_by_id_crud(db: Session, machine_id: int):
+    """
+    Retrieve a machine by its ID.
+    
+    Returns None if not found.
+    """
+    return db.query(Machine).filter(Machine.id == machine_id).first()

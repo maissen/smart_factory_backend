@@ -3,7 +3,7 @@ from src.db_crud.machine.machine_crud import update_machine_crud
 from src.exceptions.machine_exceptions import *
 from src.helpers.str_helpers import is_valid_str, normalize_str
 from src.services.factory.get_factory_service import get_factory_of_user_service
-from src.services.machine.get_machine_service import get_all_factory_machines_service, get_machine_by_serial_service, get_machine_by_name_service
+from src.services.machine.get_machine_service import get_machine_by_serial_service, get_machine_by_name_service, get_machine_by_id_service
 from src.core.settings import settings
 from src.helpers.str_helpers import is_valid_str
 from src.helpers.validate_user_id import validate_user_id
@@ -23,19 +23,11 @@ def update_machine_service(
 
     validate_user_id(user_id)
     
+    # check if factory exists
     factory = get_factory_of_user_service(db=db, user_id=user_id)
 
-    machines = get_all_factory_machines_service(db=db, factory_id=factory.id, user_id=user_id)
-    machine = None
-    for m in machines:
-        if m.id == machine_id:
-            machine = m
-            break
-    else:
-        raise MachineNotFoundError()
-
-    if machine.factory_id != factory.id:
-        raise MachineAccessDeniedError()
+    # check if machine exists
+    machine = get_machine_by_id_service(db=db, machine_id=machine_id)
 
     is_valid_str(name, raise_on_error=True, err_msg="Machine name must be a non-empty valid name.")
     name = normalize_str(name)

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from src.db_crud.machine.machine_crud import get_factory_machines_crud, get_machine_by_name_crud, get_machine_by_serial_crud
+from src.db_crud.machine.machine_crud import get_factory_machines_crud, get_machine_by_id_crud, get_machine_by_name_crud, get_machine_by_serial_crud
 from src.exceptions.machine_exceptions import (
     MachineFetchError,
     MachineNotFoundError
@@ -61,5 +61,21 @@ def get_machine_by_name_service(
 
     if not machine and raise_err:
         raise MachineNotFoundError()
+
+    return machine
+
+
+def get_machine_by_id_service(
+    db: Session,
+    machine_id: int,
+    raise_err: bool = True
+):
+    """
+    Get machine by ID.
+    """
+    machine = get_machine_by_id_crud(db=db, machine_id=machine_id)
+
+    if not machine and raise_err:
+        raise MachineNotFoundError(f"Machine with ID {machine_id} not found.")
 
     return machine
