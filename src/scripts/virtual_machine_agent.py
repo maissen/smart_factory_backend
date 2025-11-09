@@ -1,6 +1,6 @@
 import time
 import random
-# import requests
+from src.core.settings import settings
 import os
 
 MACHINE_ID = os.getenv("MACHINE_ID")

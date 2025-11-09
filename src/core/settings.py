@@ -36,9 +36,7 @@ class Settings(BaseSettings):
 
 
     # application configuration
-    DEFAULT_ERROR_MESSAGE: str
-    MIN_PASSWORD_LENGTH: int
-    MIN_PHONE_NUMBER_LENGTH: int
+    PUSH_TS_DATA_PERIOD: int
 
     # machines config
     MACHINE_POSSIBLE_STATUS: list = ["Running", "Idle", "Maintenance", "Stopped"]
