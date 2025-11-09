@@ -25,7 +25,7 @@ def update_user_service(
     phone_number: str,
 ):
     # Validate user_id
-    validated_user_id = validate_user_id(user_id=user_id)
+    validate_user_id(user_id=user_id)
 
     # Validate full_name
     if not is_valid_str(full_name):
@@ -37,23 +37,23 @@ def update_user_service(
     validated_phone = validate_phone_number(phone_number)
 
     # Ensure user exists
-    user = get_user_by_id_service(db=db, user_id=validated_user_id)
+    user = get_user_by_id_service(db=db, user_id=user_id)
 
     # Check email conflict
     existing_email_user = get_user_by_email_optional_service(db=db, email=validated_email)
-    if existing_email_user and existing_email_user.id != validated_user_id:
+    if existing_email_user and existing_email_user.id != user_id:
         raise EmailAlreadyExistsError()
 
     # Check phone conflict (409)
     existing_phone_user = get_user_by_phone_number_optional_service(db=db, phone_number=validated_phone)
-    if existing_phone_user and existing_phone_user.id != validated_user_id:
+    if existing_phone_user and existing_phone_user.id != user_id:
         raise PhoneNumberAlreadyExistsError()
 
     # Perform update
     try:
         updated_user = update_user_crud(
             db=db,
-            user_id=validated_user_id,
+            user_id=user_id,
             full_name=full_name,
             email=validated_email,
             phone_number=validated_phone,

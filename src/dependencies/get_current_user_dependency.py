@@ -9,6 +9,8 @@ from datetime import datetime, timezone
 from src.dependencies.postgres_dependency import get_db
 from src.schema.token_schema import TokenPayload
 from src.core.settings import settings
+from src.exceptions.user_exceptions import *
+from src.exceptions.token_exceptions import *
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")  # login route
 
@@ -34,20 +36,20 @@ def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_
         )
 
         if datetime.now(tz=timezone.utc).timestamp() > token_data.expiration_time:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has expired")
+            raise TokenExpiredError()
 
     except ExpiredSignatureError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has expired")
+        raise TokenExpiredError()
     
     except InvalidTokenError:
-        raise credentials_exception
+        raise InvalidEmailError()
 
     # Fetch user by ID
     try:
         user = get_user_by_id_service(db, int(token_data.user_id))
 
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User does not exist.")
+        raise UserNotFoundError()
 
 
 

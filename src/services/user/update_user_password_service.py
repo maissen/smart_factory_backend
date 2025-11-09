@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from src.db_crud.users.update_user_password_crud import update_password_crud
 from src.helpers.str_helpers import validate_password
 from src.services.user.get_user_by_id_service import get_user_by_id_service
+from src.helpers.validate_user_id import validate_user_id
 
 from src.helpers.auth import verify_password
 from src.exceptions.user_exceptions import (
@@ -22,10 +23,7 @@ def update_password_service(
     Service function to update a user's password.
     Performs input validation and error normalization with custom exceptions.
     """
-
-    # Validate user_id
-    if not isinstance(user_id, int) or user_id <= 0:
-        raise InvalidUserIdError()
+    validate_user_id(user_id)
     
     validate_password(new_password)
     validate_password(old_password)

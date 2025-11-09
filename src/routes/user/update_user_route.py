@@ -15,7 +15,7 @@ from src.exceptions.user_exceptions import (
 router = APIRouter()
 
 
-@router.put("/update/{user_id}", response_model=UserResponse)
+@router.put("/{user_id}/update", response_model=UserResponse)
 def update_user(
     user_id: int,
     payload: UserUpdateRequest,
