@@ -25,7 +25,7 @@ def update_password(
 ):
 
     # Ensure users can only change their own password unless admin privilege exists
-    if current_user.id != user_id and current_user.role != settings.USER_ALLOWED_ROLES[0]:
+    if current_user.id != user_id:
         raise UserNotAllowedError()
     
     

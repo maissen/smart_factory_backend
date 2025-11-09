@@ -23,7 +23,7 @@ def update_user(
     current_user = Depends(get_current_user),
 ):
     # Prevent updating another user's profile (unless for admin users)
-    if current_user.role != settings.USER_ALLOWED_ROLES[0] and current_user.id != user_id:
+    if current_user.id != user_id:
         raise UserNotAllowedError()
 
     # Perform update
