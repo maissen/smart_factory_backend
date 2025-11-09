@@ -9,10 +9,9 @@ from src.dependencies.get_current_user_dependency import get_current_user
 
 router = APIRouter()
 
-@router.put("/update/{shift_id}", response_model=ShiftResponseSchema)
+@router.put("/update", response_model=ShiftResponseSchema)
 def update_shift(
-    shift_id: int,
-    shift_data: ShiftUpdateSchema,
+    payload: ShiftUpdateSchema,
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user),
 ):
@@ -22,10 +21,9 @@ def update_shift(
     """
     updated_shift = update_shift_service(
         db=db,
-        shift_id=shift_id,
-        name=shift_data.name,
-        start_time=shift_data.start_time,
-        end_time=shift_data.end_time,
-        current_user=current_user,
+        name=payload.name,
+        start_time=payload.start_time,
+        end_time=payload.end_time,
+        user_id=current_user.id
     )
     return updated_shift

@@ -12,9 +12,8 @@ from src.schema.shift_schema import ShiftCreateSchema, ShiftResponseSchema
 router = APIRouter()
 
 
-@router.post("/create/{factory_id}", response_model=ShiftResponseSchema, status_code=status.HTTP_201_CREATED)
+@router.post("/create", response_model=ShiftResponseSchema, status_code=status.HTTP_201_CREATED)
 def create_shift_route(
-    factory_id: int,
     data: ShiftCreateSchema,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
@@ -24,10 +23,9 @@ def create_shift_route(
     """
     return create_shift_service(
         db=db,
-        factory_id=factory_id,
         name=data.name,
         start_time=data.start_time,
         end_time=data.end_time,
-        current_user=current_user,
+        user_id=current_user.id,
     )
 

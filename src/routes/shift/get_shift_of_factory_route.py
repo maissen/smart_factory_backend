@@ -22,5 +22,4 @@ def get_shift_of_factory_route(
     return get_shift_of_factory_service(
         db=db, 
         factory_id=factory_id, 
-        current_user=current_user
     )
