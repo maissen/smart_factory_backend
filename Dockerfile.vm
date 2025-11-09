@@ -4,6 +4,6 @@ WORKDIR /app
 
 RUN pip install requests
 
-COPY src/scripts/virtual_machine_agent.py .
+COPY vm_agent/virtual_machine_agent.py .
 
 CMD ["python", "virtual_machine_agent.py"]
