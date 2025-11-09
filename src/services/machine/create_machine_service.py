@@ -54,7 +54,7 @@ def create_machine_service(
         )
         
         # create the vm agent using docker
-        launch_vm_container(machine_id=new_machine.id)
+        # launch_vm_container(machine_id=new_machine.id)
         
         return new_machine
         
