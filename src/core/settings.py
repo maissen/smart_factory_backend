@@ -35,6 +35,14 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 20160 # two weeks
 
 
+    # InfluxDB configuration
+    DOCKER_INFLUXDB_INIT_USERNAME: str
+    DOCKER_INFLUXDB_INIT_PASSWORD: str
+    DOCKER_INFLUXDB_INIT_ORG: str
+    DOCKER_INFLUXDB_INIT_BUCKET: str
+    DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: str
+
+
     # machines config
     MACHINE_POSSIBLE_STATUS: list = ["Running", "Idle", "Maintenance", "Stopped"]
     
