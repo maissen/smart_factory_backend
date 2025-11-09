@@ -49,7 +49,7 @@ def create_user_service(
     if existing_email_user:
         raise EmailAlreadyExistsError()
 
-    existing_phone_user = get_user_by_phone_number_service(db=db, phone_number=validated_phone)
+    existing_phone_user = get_user_by_phone_number_service(db=db, phone_number=validated_phone, raise_on_error=False)
     if existing_phone_user:
         raise PhoneNumberAlreadyExistsError()
     
