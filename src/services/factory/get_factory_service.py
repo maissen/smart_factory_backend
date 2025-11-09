@@ -46,13 +46,10 @@ def get_factory_of_user_service(
     # Ensure user exists
     user = get_user_by_id_service(db, user_id)
 
-
-    try:
-        factory = get_factory_by_owner_crud(db, user_id)
-
-    except:
+    factory = get_factory_by_owner_crud(db, user_id)
+    if not factory:
         if raise_error:
-            raise FactoryNotFoundError()
+            raise FactoryNotFoundError("You don't have a factory yet.")
         return None
 
     return factory

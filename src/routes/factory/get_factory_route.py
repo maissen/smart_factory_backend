@@ -23,11 +23,11 @@ def get_factory_of_user_route(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user)
 ):
-    factories = get_factory_of_user_service(db, current_user.id)
-    return factories
+    factory = get_factory_of_user_service(db, current_user.id)
+    return factory
 
 
-@router.get("/", response_model=list[FactoryResponse])
+@router.get("/all", response_model=list[FactoryResponse])
 def list_factories_route(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
