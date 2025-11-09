@@ -10,7 +10,7 @@ from src.db_crud.shift.create_shift_crud import create_shift_crud
 from src.services.shifts.get_shift_service import get_shift_of_factory_service
 from src.helpers.str_helpers import is_valid_str
 from src.services.factory.get_factory_service import get_factory_by_owner_crud
-
+from src.services.factory.get_factory_service import get_factory_of_user_service
 from src.exceptions.shifts_exceptions import *
 
 def create_shift_service(
@@ -28,7 +28,7 @@ def create_shift_service(
     validate_time_range(start_time, end_time)
 
     # ensure user has a factory
-    factory = get_factory_by_owner_crud(db=db, user_id=user_id)
+    factory = get_factory_of_user_service(db=db, user_id=user_id)
 
     existing_shift = get_shift_of_factory_service(db=db, factory_id=factory.id, raise_error=False)
     if existing_shift:
