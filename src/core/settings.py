@@ -36,10 +36,16 @@ class Settings(BaseSettings):
 
 
     # InfluxDB configuration
-    INFLUXDB_URL: str
+    INFLUXDB_HOST: str
+    INFLUXDB_EXTERNAL_PORT: int
     INFLUXDB_TOKEN: str
     INFLUXDB_ORG: str
     INFLUXDB_BUCKET: str
+
+    @computed_field
+    @property
+    def INFLUXDB_URL(self) -> str:
+        return f"{self.INFLUXDB_HOST}:{self.INFLUXDB_EXTERNAL_PORT}"
 
 
     # machines config

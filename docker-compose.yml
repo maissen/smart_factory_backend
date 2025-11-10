@@ -7,7 +7,7 @@ services:
       args:
         PYTHON_VERSION: ${PYTHON_VERSION}
     ports:
-      - "${EXTERNAL_PORT}:8000"
+      - "${EXTERNAL_BACKEND_PORT}:8000"
     volumes:
       - .:/app
     restart: unless-stopped
@@ -42,7 +42,7 @@ services:
     container_name: influxdb
     image: influxdb:2.7
     ports:
-      - "8086:8086"
+      - "${INFLUXDB_EXTERNAL_PORT}:8086"
     environment:
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USER}
@@ -66,10 +66,14 @@ services:
     restart: unless-stopped
     
     environment:
-      - API_BASE_URL=http://backend_app:8000
-      - GENERATION_FREQUENCY=5
-      - METRICS_DIR=/app/metrics_data
-      - STATE_DIR=/app/machine_states
+    - API_BASE_URL=http://backend_app:8000
+    - GENERATION_FREQUENCY=30
+    - METRICS_DIR=/app/metrics_data
+    - STATE_DIR=/app/machine_states
+    - API_MACHINES_ENDPOINT=/api/machine/all
+    - API_INFLUX_ENDPOINT=/api/influx/insert
+    - HISTORY_DIR=/app/history
+    - HISTORY_WINDOW_HOURS=24
 
     volumes:
       - ./iot_agent:/app
