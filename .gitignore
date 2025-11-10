@@ -8,6 +8,11 @@ __pycache__/
 .env.*
 !.env.example
 
+
+# ---- iot agent ----
+iot_agent/*
+!iot_agent/*.py
+
 # ---- Virtual Environments ----
 .venv/
 venv/

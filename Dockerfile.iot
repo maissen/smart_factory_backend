@@ -1,0 +1,12 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Create data directories (but project code will be mounted)
+RUN mkdir -p /app/metrics_data /app/machine_states
+
+CMD ["python", "-u", "main.py"]
