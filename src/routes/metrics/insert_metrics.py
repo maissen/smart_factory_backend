@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends
-from src.schema.machine_schema import MachineResponseSchema
+from fastapi import APIRouter, Depends, status
+from influxdb_client.client.write_api import SYNCHRONOUS
 from src.schema.influx_db import MetricsResponse
 from src.dependencies.influx_dependency import get_influx_client
 from src.helpers.format_metric_service import format_metrics_for_influx
@@ -7,10 +7,9 @@ from src.core.settings import settings
 
 router = APIRouter()
 
-
-@router.post("/insert", response_model=MachineResponseSchema)
+@router.post("/insert", status_code=status.HTTP_201_CREATED)
 def insert_metrics(data: MetricsResponse, influx=Depends(get_influx_client)):
-    write_api = influx.write_api(write_options=None)
+    write_api = influx.write_api(write_options=SYNCHRONOUS)
 
     lines = format_metrics_for_influx(data.metrics)
 
@@ -20,4 +19,4 @@ def insert_metrics(data: MetricsResponse, influx=Depends(get_influx_client)):
         record=lines
     )
 
-    return {"status": "success", "inserted": data.metrics_count}
+    return {"inserted": data.metrics_count}
