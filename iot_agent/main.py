@@ -27,8 +27,7 @@ HISTORY_DIR = Path(os.getenv("HISTORY_DIR", "history"))
 HISTORY_WINDOW_HOURS = int(os.getenv("HISTORY_WINDOW_HOURS", "24"))
 
 LOG_CREATE_ENDPOINT = os.getenv("LOG_CREATE_ENDPOINT", "/api/logs/create")
-
-# Create directories
+UPDATE_MACHINE_STATUS_ENDPOINT = os.getenv("UPDATE_MACHINE_STATUS_ENDPOINT", "/api/update-status/")
 METRICS_DIR.mkdir(exist_ok=True)
 STATE_DIR.mkdir(exist_ok=True)
 HISTORY_DIR.mkdir(exist_ok=True)
@@ -64,6 +63,31 @@ def create_status_log_with_api(machine_id: int, status: str):
 
     except requests.RequestException as e:
         print(f"⚠️  [LOG ERROR] Failed to create log for machine {machine_id}: {e}")
+
+
+# ============================================================================
+# update machine status api
+# ============================================================================
+
+def update_machine_status_with_api(machine_id: int, status: str):
+    """
+    Send a request to update the machine status via API.
+
+    Args:
+        machine_id (int): The machine ID to update.
+        status (str): One of: "Running", "Idle", "Maintenance", "Stopped"
+    """
+    try:
+        payload = {"status": status}
+
+        url = f"{API_BASE_URL}{UPDATE_MACHINE_STATUS_ENDPOINT}{machine_id}"
+        response = requests.put(url, json=payload, timeout=50)
+        response.raise_for_status()
+
+        print(f"✅ [STATUS UPDATE] Machine {machine_id} → {status}")
+
+    except requests.RequestException as e:
+        print(f"⚠️  [STATUS UPDATE ERROR] Could not update machine {machine_id}: {e}")
 
 
 # ============================================================================
@@ -322,6 +346,9 @@ class RealisticMachineSimulator:
         
         # Print status change notification
         print(f"🔄 [{self.machine_name}] {old_state} → {new_state}")
+        
+        # ✨ UPDATE MACHINE STATUS IN DATABASE
+        update_machine_status_with_api(self.machine_id, new_state)
         
         # ✨ CREATE STATUS LOG WHEN STATE CHANGES
         create_status_log_with_api(self.machine_id, new_state)
@@ -613,9 +640,6 @@ class MultiMachineSimulator:
             except Exception as e:
                 print(f"\n❌ Error in simulation loop: {e}")
                 print(f"Retrying in {GENERATION_FREQUENCY}s...")
-
-
-            create_status_log_with_api(machine_id=20, status="Idle")
             
             time.sleep(GENERATION_FREQUENCY)
 
