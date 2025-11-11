@@ -27,7 +27,7 @@ def upgrade() -> None:
     sa.Column('timestamp', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True, comment='Log timestamp'),
     sa.Column('status', sa.String(length=20), nullable=True, comment='Machine state'),
     sa.Column('notes', sa.Text(), nullable=True, comment='Comments or system-generated remarks'),
-    sa.CheckConstraint("status IN ('Running', 'Idle', 'Maintenance', 'Fault')", name='valid_log_status'),
+    sa.CheckConstraint("status IN ('Running', 'Idle', 'Maintenance', 'Stopped')", name='valid_log_status'),
     sa.ForeignKeyConstraint(['machine_id'], ['machines.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
