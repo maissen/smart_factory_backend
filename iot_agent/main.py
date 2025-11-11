@@ -26,10 +26,45 @@ STATE_DIR = Path(os.getenv("STATE_DIR", "machine_states"))
 HISTORY_DIR = Path(os.getenv("HISTORY_DIR", "history"))
 HISTORY_WINDOW_HOURS = int(os.getenv("HISTORY_WINDOW_HOURS", "24"))
 
+LOG_CREATE_ENDPOINT = os.getenv("LOG_CREATE_ENDPOINT", "/api/logs/create") #{POST request body : "machine_id": 1, status: "Running", "notes": "...."}
+
 # Create directories
 METRICS_DIR.mkdir(exist_ok=True)
 STATE_DIR.mkdir(exist_ok=True)
 HISTORY_DIR.mkdir(exist_ok=True)
+
+
+
+# ============================================================================
+# create machine log with api
+# ============================================================================
+from .status_notes import *
+def create_status_log_with_api(machine_id: int, status: str):
+    """
+    Create a machine log via API with a random note based on the status.
+    
+    Args:
+        machine_id (int): ID of the machine.
+        status (str): One of "Running", "Idle", "Maintenance", "Stopped".
+    """
+    try:
+        # Get a random note for the given status
+        note = get_random_note_for_status(status)
+        
+        payload = {
+            "machine_id": machine_id,
+            "status": status,
+            "notes": note
+        }
+
+        response = requests.post(f"{API_BASE_URL}{LOG_CREATE_ENDPOINT}", json=payload, timeout=50)
+        response.raise_for_status()  # Raise an exception if the request failed
+
+        print(f"[INFO] Log created for machine {machine_id} | status: {status} | note: {note}")
+
+    except requests.RequestException as e:
+        print(f"[ERROR] Failed to create log for machine {machine_id}: {e}")
+    
 
 
 # ============================================================================
