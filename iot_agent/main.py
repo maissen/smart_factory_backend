@@ -19,6 +19,7 @@ from typing import Dict, List, Optional
 API_BASE_URL = os.getenv("API_BASE_URL", "http://backend_app:7000")
 API_MACHINES_ENDPOINT = os.getenv("API_MACHINES_ENDPOINT", "/api/machine/all")
 API_INFLUX_ENDPOINT = os.getenv("API_INFLUX_ENDPOINT", "/api/influx/insert")
+API_UPDATE_MAINTENANCE_ENDPOINT = os.getenv("API_UPDATE_MAINTENANCE_ENDPOINT", "/api/machine/{machine_id}/maintenance")
 GENERATION_FREQUENCY = int(os.getenv("GENERATION_FREQUENCY", "30"))  # seconds
 METRICS_DIR = Path(os.getenv("METRICS_DIR", "metrics_data"))
 STATE_DIR = Path(os.getenv("STATE_DIR", "machine_states"))
@@ -234,15 +235,41 @@ class RealisticMachineSimulator:
         # Weighted random choice
         return random.choices(states, weights=probabilities, k=1)[0]
     
+    def _update_maintenance_api(self, entering_maintenance: bool):
+        """Call API to update last_maintenance timestamp"""
+        try:
+            url = f"{API_BASE_URL}{API_UPDATE_MAINTENANCE_ENDPOINT}".format(machine_id=self.machine_id)
+            
+            payload = {
+                "machine_id": self.machine_id,
+                "last_maintenance": datetime.now().isoformat(),
+                "entering_maintenance": entering_maintenance
+            }
+            
+            response = requests.put(url, json=payload, timeout=5)
+            response.raise_for_status()
+            
+            action = "ENTERED" if entering_maintenance else "LEFT"
+            print(f"🔧 [{self.machine_name}] {action} Maintenance → update_last_maintenance_crud_fn_here")
+            
+        except requests.exceptions.RequestException as e:
+            print(f"⚠️  [{self.machine_name}] Failed to update maintenance API: {e}")
+    
     def _transition_to_new_state(self):
         """Perform state transition"""
+        old_state = self.state.status
         new_state = self._get_next_state()
         config = STATE_METRICS[new_state]
+        
+        # Check if leaving maintenance
+        if old_state == "Maintenance" and new_state != "Maintenance":
+            self._update_maintenance_api(entering_maintenance=False)
         
         # Reset wear if entering maintenance
         if new_state == "Maintenance":
             self.state.wear_level = 0
             self.state.last_maintenance = time.time()
+            self._update_maintenance_api(entering_maintenance=True)
         
         # Update state
         self.state.status = new_state
@@ -258,7 +285,9 @@ class RealisticMachineSimulator:
         self.state.power_usage += (target_power - self.state.power_usage) * 0.3
         
         self._save_state()
-        print(f"[Machine-{self.machine_id}] → {new_state} for {self.state.duration_seconds}s")
+        
+        # Print status change notification
+        print(f"🔄 {self.machine_name}: changed status from {old_state} to {new_state}")
     
     def _update_metrics_smoothly(self):
         """Update metrics with realistic variations"""
@@ -443,7 +472,6 @@ class MultiMachineSimulator:
         }
         
         try:
-            
             response = requests.post(
                 self.api_influx_url, 
                 json=payload, 

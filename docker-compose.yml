@@ -52,6 +52,7 @@ services:
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_TOKEN}
     volumes:
       - influxdb_data:/var/lib/influxdb2
+      - ./iot_agent:/app
     networks:
       - smart_factory_network
     restart: unless-stopped
