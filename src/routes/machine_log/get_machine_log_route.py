@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -14,7 +14,7 @@ from src.services.machine_log.get_machine_log_service import get_machine_logs_se
 router = APIRouter()
 
 
-@router.get("/machine/{machine_id}", response_model=List[MachineLogResponseSchema])
+@router.get("/machine/{machine_id}", response_model=List[MachineLogResponseSchema], status_code=status.HTTP_200_OK)
 def get_machine_logs(
     machine_id: int,
     db: Session = Depends(get_db),
