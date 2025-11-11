@@ -12,20 +12,26 @@ from src.helpers.validate_user_id import validate_user_id
 from src.helpers.factory import validate_factory_id
 
 
-def get_factory_by_id_service(db: Session, factory_id: int) -> Factory:
-
-    # ID validation
+def get_factory_by_id_service(db: Session, factory_id: int, raise_err: bool = True) -> Factory | None:
+    
     validate_factory_id(factory_id)
 
     try:
         factory = get_factory_by_id_crud(db, factory_id)
         if not factory:
-            raise FactoryNotFoundError()
-        
+            if raise_err:
+                raise FactoryNotFoundError()
+            return None
         return factory
     
+    except FactoryError:
+        # re-raise factory error
+        raise
+    
     except Exception as e:
-        raise FactoryError("Failed to fetch factories.")
+        # only catch unexpected errors
+        print(e)
+        raise FactoryError("Failed to fetch factory.")
 
 
 def list_factories_service(db: Session) -> list[Factory]:

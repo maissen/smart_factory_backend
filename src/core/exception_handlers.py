@@ -22,6 +22,7 @@ def register_exception_handlers(app):
     exception_to_status = {
 
         # ========== FACTORY ==========
+        FactoryError: status.HTTP_500_INTERNAL_SERVER_ERROR,
         FactoryNotFoundError: status.HTTP_404_NOT_FOUND,
         FactoryOwnerNotFoundError: status.HTTP_404_NOT_FOUND,
         FactoryAlreadyExistsError: status.HTTP_409_CONFLICT,
