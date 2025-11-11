@@ -26,7 +26,7 @@ STATE_DIR = Path(os.getenv("STATE_DIR", "machine_states"))
 HISTORY_DIR = Path(os.getenv("HISTORY_DIR", "history"))
 HISTORY_WINDOW_HOURS = int(os.getenv("HISTORY_WINDOW_HOURS", "24"))
 
-LOG_CREATE_ENDPOINT = os.getenv("LOG_CREATE_ENDPOINT", "/api/logs/create") #{POST request body : "machine_id": 1, status: "Running", "notes": "...."}
+LOG_CREATE_ENDPOINT = os.getenv("LOG_CREATE_ENDPOINT", "/api/logs/create")
 
 # Create directories
 METRICS_DIR.mkdir(exist_ok=True)
@@ -34,11 +34,11 @@ STATE_DIR.mkdir(exist_ok=True)
 HISTORY_DIR.mkdir(exist_ok=True)
 
 
-
 # ============================================================================
 # create machine log with api
 # ============================================================================
-from .status_notes import *
+from status_notes import get_random_note_for_status
+
 def create_status_log_with_api(machine_id: int, status: str):
     """
     Create a machine log via API with a random note based on the status.
@@ -60,11 +60,10 @@ def create_status_log_with_api(machine_id: int, status: str):
         response = requests.post(f"{API_BASE_URL}{LOG_CREATE_ENDPOINT}", json=payload, timeout=50)
         response.raise_for_status()  # Raise an exception if the request failed
 
-        print(f"[INFO] Log created for machine {machine_id} | status: {status} | note: {note}")
+        print(f"📝 [LOG] Machine {machine_id} | {status} | {note}")
 
     except requests.RequestException as e:
-        print(f"[ERROR] Failed to create log for machine {machine_id}: {e}")
-    
+        print(f"⚠️  [LOG ERROR] Failed to create log for machine {machine_id}: {e}")
 
 
 # ============================================================================
@@ -285,7 +284,7 @@ class RealisticMachineSimulator:
             response.raise_for_status()
             
             action = "ENTERED" if entering_maintenance else "LEFT"
-            print(f"🔧 [{self.machine_name}] {action} Maintenance → update_last_maintenance_crud_fn_here")
+            print(f"🔧 [{self.machine_name}] {action} Maintenance → API updated")
             
         except requests.exceptions.RequestException as e:
             print(f"⚠️  [{self.machine_name}] Failed to update maintenance API: {e}")
@@ -322,7 +321,10 @@ class RealisticMachineSimulator:
         self._save_state()
         
         # Print status change notification
-        print(f"🔄 {self.machine_name}: changed status from {old_state} to {new_state}")
+        print(f"🔄 [{self.machine_name}] {old_state} → {new_state}")
+        
+        # ✨ CREATE STATUS LOG WHEN STATE CHANGES
+        create_status_log_with_api(self.machine_id, new_state)
     
     def _update_metrics_smoothly(self):
         """Update metrics with realistic variations"""
@@ -611,6 +613,9 @@ class MultiMachineSimulator:
             except Exception as e:
                 print(f"\n❌ Error in simulation loop: {e}")
                 print(f"Retrying in {GENERATION_FREQUENCY}s...")
+
+
+            create_status_log_with_api(machine_id=20, status="Idle")
             
             time.sleep(GENERATION_FREQUENCY)
 
