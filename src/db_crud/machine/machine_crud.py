@@ -9,7 +9,6 @@ def create_machine_crud(
     factory_id: int,
     name: str,
     serial_number: str,
-    status: str = None,
     last_maintenance_date=None,
     description: str = None,
 ) -> Machine:
@@ -43,7 +42,6 @@ def update_machine_crud(
     machine_id: int,
     name: str | None = None,
     serial_number: str | None = None,
-    status: str | None = None,
     last_maintenance_date=None,
     description: str | None = None,
 ) -> Machine:
@@ -55,8 +53,6 @@ def update_machine_crud(
         machine.name = name
     if serial_number is not None:
         machine.serial_number = serial_number
-    if status is not None:
-        machine.status = status
     if last_maintenance_date is not None:
         machine.last_maintenance_date = last_maintenance_date
     if description is not None:

@@ -22,7 +22,6 @@ def update_machine(
         machine_id=machine_id,
         name=request.name,
         serial_number=request.serial_number,
-        status=request.status,
         description=request.description,
         user_id=current_user.id
     )

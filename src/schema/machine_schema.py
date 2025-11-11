@@ -12,7 +12,6 @@ class MachineCreateRequestSchema(BaseModel):
 class MachineUpdateRequestSchema(BaseModel):
     name: str
     serial_number: str
-    status: str
     description: str
 
 

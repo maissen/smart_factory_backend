@@ -15,7 +15,6 @@ def update_machine_service(
     user_id: int,
     name: str,
     serial_number: str,
-    status: str,
     last_maintenance_date=None,
     description: str = None
 ):
@@ -43,16 +42,12 @@ def update_machine_service(
     if machine_by_serial_nb:
         raise MachineSerialNumberAlreadyExistsError()
 
-    if status not in settings.MACHINE_POSSIBLE_STATUS:
-        raise InvalidMachineStatusError()
-
     try:
         updated_machine = update_machine_crud(
             db=db,
             machine_id=machine_id,
             name=name,
             serial_number=serial_number,
-            status=status,
             last_maintenance_date=last_maintenance_date,
             description=description
         )
