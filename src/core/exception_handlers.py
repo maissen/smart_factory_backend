@@ -32,6 +32,7 @@ def register_exception_handlers(app):
         InvalidFactoryIdError: status.HTTP_400_BAD_REQUEST,
 
         # ========== MACHINE ==========
+        MachineError: status.HTTP_500_INTERNAL_SERVER_ERROR,
         MachineNotFoundError: status.HTTP_404_NOT_FOUND,
         MachineNameAlreadyExistsError: status.HTTP_409_CONFLICT,
         MachineSerialNumberAlreadyExistsError: status.HTTP_409_CONFLICT,

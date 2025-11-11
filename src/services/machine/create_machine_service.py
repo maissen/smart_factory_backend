@@ -35,11 +35,6 @@ def create_machine_service(
     machine_by_serial_nb = get_machine_by_serial_service(db=db, serial_number=serial_number, raise_err=False)
     if machine_by_serial_nb:
         raise MachineSerialNumberAlreadyExistsError()
-    
-    if status not in settings.MACHINE_POSSIBLE_STATUS:
-        raise InvalidMachineStatusError(f"Invalid status, possible statuses are : {settings.MACHINE_POSSIBLE_STATUS}")
-    
-
 
     try:
         new_machine = create_machine_crud(
@@ -47,9 +42,8 @@ def create_machine_service(
             factory_id=factory.id,
             name=name,
             serial_number=serial_number,
-            status=status,
             last_maintenance_date=last_maintenance_date,
-            description=description
+            description=description,
         )
         
         return new_machine

@@ -5,7 +5,6 @@ from typing import Optional
 class MachineCreateRequestSchema(BaseModel):
     name: str
     serial_number: str
-    status: str
     description: str
 
 

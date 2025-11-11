@@ -15,16 +15,16 @@ router = APIRouter()
 
 @router.post("/create", response_model=MachineResponseSchema, status_code=status.HTTP_201_CREATED)
 def create_machine(
-    request: MachineCreateRequestSchema,
+    payload: MachineCreateRequestSchema,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
+    
     machine = create_machine_service(
         db=db,
-        name=request.name,
-        serial_number=request.serial_number,
-        status=request.status,
-        description=request.description,
+        name=payload.name,
+        serial_number=payload.serial_number,
+        description=payload.description,
         user_id=current_user.id
     )
     return machine

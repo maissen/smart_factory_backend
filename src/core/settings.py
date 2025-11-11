@@ -6,6 +6,9 @@ class Settings(BaseSettings):
     PYTHON_VERSION: str = "3.13.2"
     EXTERNAL_PORT: int = 8000
     HOST: str = "0.0.0.0"
+    
+    MIN_PASSWORD_LENGTH: int = 8
+    MIN_PHONE_NUMBER_LENGTH: int = 8
 
     # User config
     USER_ALLOWED_ROLES: list = ['admin', 'client']
