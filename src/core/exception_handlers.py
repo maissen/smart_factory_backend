@@ -9,6 +9,7 @@ from src.exceptions.user_exceptions import *
 from src.exceptions.token_exceptions import *
 from src.exceptions.string_exceptions import *
 from src.exceptions.tsdb_exceptions import *
+from src.exceptions.machine_log_exceptions import *
 
 
 def register_exception_handlers(app):
@@ -91,6 +92,16 @@ def register_exception_handlers(app):
         TSDBError: status.HTTP_500_INTERNAL_SERVER_ERROR,
         TSDBConnectionError: status.HTTP_503_SERVICE_UNAVAILABLE,
         TSDBWriteError: status.HTTP_500_INTERNAL_SERVER_ERROR,
+
+        
+        # ========== MACHINE LOGS ==========
+        MachineLogError: status.HTTP_500_INTERNAL_SERVER_ERROR,
+        MachineLogNotFoundError: status.HTTP_404_NOT_FOUND,
+        InvalidMachineLogStatusError: status.HTTP_400_BAD_REQUEST,
+        MachineLogAccessDeniedError: status.HTTP_403_FORBIDDEN,
+        MachineLogCreateError: status.HTTP_500_INTERNAL_SERVER_ERROR,
+        MachineLogDeleteError: status.HTTP_500_INTERNAL_SERVER_ERROR,
+        MachineLogFetchError: status.HTTP_500_INTERNAL_SERVER_ERROR,
 
     }
 
