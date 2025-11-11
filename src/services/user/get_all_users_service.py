@@ -9,7 +9,7 @@ from src.exceptions.user_exceptions import (
 )
 
 
-def get_all_users_service(db: Session, role: str | None):
+def get_all_users_service(db: Session, role: str | None = None):
     """
     Service function to retrieve all users, optionally filtered by role.
     Includes validation and controlled exception behavior.
@@ -21,8 +21,7 @@ def get_all_users_service(db: Session, role: str | None):
     """
 
     if role is not None: # None if the role is not passed to the service
-        if not is_valid_str(role):
-            raise InvalidRoleError()
+        is_valid_str(role)
 
     try:
         users = get_all_users_crud(db, role)

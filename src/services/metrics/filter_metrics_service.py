@@ -10,13 +10,13 @@ from src.core.settings import settings
 
 def filter_metrics_service(
     db: Session,
-    metrics: MetricsRequest, 
+    metrics: MetricsRequest,
+    influx_client
 ):
 
-    all_users = get_all_users_service(db=db, role=settings.USER_ALLOWED_ROLES[1])
+    all_users = get_all_users_service(db=db)
 
     for user in all_users:
-
         factory = get_factory_of_user_service(db=db, user_id=user.id, raise_error=False)
         if not factory:
             continue
@@ -28,20 +28,16 @@ def filter_metrics_service(
         machines = get_all_factory_machines_service(db=db, user_id=user.id, factory_id=factory.id)
         factory_machine_ids = {m.id for m in machines}
 
-        # Filter metrics to match:
-        #   1) Machine belongs to the factory
-        #   2) Metric timestamp inside shift hours
         filtered_metrics = [
             metric for metric in metrics.metrics
             if metric.machine_id in factory_machine_ids
             and is_within_shift(metric.timestamp, shift.start_time, shift.end_time)
         ]
 
-        # insert the metrics
         if filtered_metrics:
             filtered_request = MetricsRequest(
                 timestamp=metrics.timestamp,
                 metrics=filtered_metrics
             )
 
-        insert_metrics_service(filtered_request, influxdb)
+            insert_metrics_service(filtered_request, influx_client)

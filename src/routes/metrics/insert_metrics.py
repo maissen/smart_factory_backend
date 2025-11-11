@@ -16,8 +16,8 @@ router = APIRouter()
 @router.post("/insert", status_code=status.HTTP_200_OK)
 def insert_metrics(
     metrics: MetricsRequest, 
-    influxdb=Depends(get_influx_client),
+    influx_client=Depends(get_influx_client),
     db=Depends(get_db)
 ):
     
-    filter_metrics_service(db=db, metrics=metrics)
+    filter_metrics_service(db=db, metrics=metrics, influx_client=influx_client)
