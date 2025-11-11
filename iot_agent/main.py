@@ -28,7 +28,7 @@ HISTORY_WINDOW_HOURS = int(os.getenv("HISTORY_WINDOW_HOURS", "24"))
 DEFAULT_MACHINE_STATUS_TO_START_WITH = os.getenv("DEFAULT_MACHINE_STATUS_TO_START_WITH", "Idle")
 
 LOG_CREATE_ENDPOINT = os.getenv("LOG_CREATE_ENDPOINT", "/api/logs/create")
-UPDATE_MACHINE_STATUS_ENDPOINT = os.getenv("UPDATE_MACHINE_STATUS_ENDPOINT", "/api/update-status/")
+UPDATE_MACHINE_STATUS_ENDPOINT = os.getenv("UPDATE_MACHINE_STATUS_ENDPOINT", "/api/machine/update-status/")
 METRICS_DIR.mkdir(exist_ok=True)
 STATE_DIR.mkdir(exist_ok=True)
 HISTORY_DIR.mkdir(exist_ok=True)
