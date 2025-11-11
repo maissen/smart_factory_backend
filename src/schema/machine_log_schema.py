@@ -15,6 +15,3 @@ class MachineLogResponseSchema(BaseModel):
     status: Optional[str] = None
     notes: Optional[str] = None
     timestamp: datetime
-
-    class Config:
-        orm_mode = True
