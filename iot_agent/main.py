@@ -25,6 +25,7 @@ METRICS_DIR = Path(os.getenv("METRICS_DIR", "metrics_data"))
 STATE_DIR = Path(os.getenv("STATE_DIR", "machine_states"))
 HISTORY_DIR = Path(os.getenv("HISTORY_DIR", "history"))
 HISTORY_WINDOW_HOURS = int(os.getenv("HISTORY_WINDOW_HOURS", "24"))
+DEFAULT_MACHINE_STATUS_TO_START_WITH = os.getenv("DEFAULT_MACHINE_STATUS_TO_START_WITH", "Idle")
 
 LOG_CREATE_ENDPOINT = os.getenv("LOG_CREATE_ENDPOINT", "/api/logs/create")
 UPDATE_MACHINE_STATUS_ENDPOINT = os.getenv("UPDATE_MACHINE_STATUS_ENDPOINT", "/api/update-status/")
@@ -497,7 +498,16 @@ class MultiMachineSimulator:
             for machine in machines:
                 machine_id = machine.get('id') or machine.get('machine_id')
                 machine_name = machine.get('name') or machine.get('machine_name')
-                machine_status = machine.get('status', 'Idle')
+                
+                # Use DEFAULT_MACHINE_STATUS_TO_START_WITH for new machines
+                # Only use API status if machine state already exists
+                state_file = STATE_DIR / f"machine_{machine_id}.json"
+                if state_file.exists():
+                    # Machine has existing state, use its current status
+                    machine_status = machine.get('status', DEFAULT_MACHINE_STATUS_TO_START_WITH)
+                else:
+                    # New machine, use default status
+                    machine_status = DEFAULT_MACHINE_STATUS_TO_START_WITH
                 
                 if machine_id and machine_name:
                     sim = RealisticMachineSimulator(
