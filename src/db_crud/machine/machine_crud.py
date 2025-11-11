@@ -1,3 +1,4 @@
+from datetime import date
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import NoResultFound
 
@@ -64,13 +65,20 @@ def update_machine_status_crud(
     db: Session,
     machine_id: int,
     status: str,
+    maintenance_date: date | None = None
 ) -> Machine:
     machine = db.query(Machine).filter(Machine.id == machine_id).first()
+    if not machine:
+        raise NoResultFound("Machine not found")
+
     machine.status = status
+    if maintenance_date:
+        machine.last_maintenance_date = maintenance_date
 
     db.commit()
     db.refresh(machine)
     return machine
+
 
 
 def delete_machine_crud(

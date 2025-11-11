@@ -1,3 +1,4 @@
+from datetime import date
 from sqlalchemy.orm import Session
 from src.db_crud.machine.machine_crud import update_machine_crud, update_machine_status_crud
 from src.exceptions.machine_exceptions import *
@@ -76,17 +77,24 @@ def update_machine_status_service(
     is_valid_str(status, raise_on_error=True, err_msg="Machine status must be a non-empty valid string.")
     status = normalize_str(status)
 
-    # If your status should be one of allowed values, enforce here:
     if status not in settings.MACHINE_POSSIBLE_STATUS:
-        raise InvalidMachineStatusError(f"Invalid machine status.")
+        raise InvalidMachineStatusError("Invalid machine status.")
+
+    # Determine if maintenance date should be set (transitioning OUT of Maintenance)
+    is_leaving_maintenance = (
+        machine.status == settings.MACHINE_POSSIBLE_STATUS[2]  # "Maintenance"
+        and status != settings.MACHINE_POSSIBLE_STATUS[2]
+    )
+
+    maintenance_date = date.today() if is_leaving_maintenance else None
 
     try:
         updated_machine = update_machine_status_crud(
             db=db,
             machine_id=machine_id,
             status=status,
+            maintenance_date=maintenance_date
         )
-
     except Exception:
         raise MachineError("Failed to update machine status.")
 
