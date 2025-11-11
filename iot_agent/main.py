@@ -299,12 +299,20 @@ class RealisticMachineSimulator:
         timestamp_sec = time.time()
         timestamp_ns = int(timestamp_sec * 1e9)
         
+        # Force 0 values for Stopped and Maintenance states
+        if self.state.status in ["Stopped", "Maintenance"]:
+            temperature = 0.0
+            power_usage = 0.0
+        else:
+            temperature = round(self.state.temperature, 2)
+            power_usage = round(self.state.power_usage, 2)
+        
         return {
             "machine_id": self.machine_id,
             "machine_name": self.machine_name,
             "status": self.state.status,
-            "temperature": round(self.state.temperature, 2),
-            "power_usage": round(self.state.power_usage, 2),
+            "temperature": temperature,
+            "power_usage": power_usage,
             "timestamp": datetime.now().isoformat(),
             "timestamp_ns": timestamp_ns
         }
@@ -435,9 +443,6 @@ class MultiMachineSimulator:
         }
         
         try:
-            # Debug: Print first metric to see structure
-            if cleaned_metrics:
-                print(f"[Debug] Sample metric: {json.dumps(cleaned_metrics[0], indent=2)}")
             
             response = requests.post(
                 self.api_influx_url, 
