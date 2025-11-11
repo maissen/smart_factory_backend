@@ -16,7 +16,6 @@ def create_machine_crud(
         factory_id=factory_id,
         name=name,
         serial_number=serial_number,
-        status=status,
         last_maintenance_date=last_maintenance_date,
         description=description,
     )
@@ -46,8 +45,6 @@ def update_machine_crud(
     description: str | None = None,
 ) -> Machine:
     machine = db.query(Machine).filter(Machine.id == machine_id).first()
-    if not machine:
-        raise NoResultFound("Machine not found")
 
     if name is not None:
         machine.name = name
@@ -57,6 +54,19 @@ def update_machine_crud(
         machine.last_maintenance_date = last_maintenance_date
     if description is not None:
         machine.description = description
+
+    db.commit()
+    db.refresh(machine)
+    return machine
+
+
+def update_machine_status_crud(
+    db: Session,
+    machine_id: int,
+    status: str,
+) -> Machine:
+    machine = db.query(Machine).filter(Machine.id == machine_id).first()
+    machine.status = status
 
     db.commit()
     db.refresh(machine)

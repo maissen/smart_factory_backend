@@ -26,3 +26,6 @@ class MachineResponseSchema(BaseModel):
     updated_at: datetime
 
 
+class MachineStatusUpdateRequestSchema(BaseModel):
+    status: str
+

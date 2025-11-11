@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
-from src.schema.machine_schema import MachineResponseSchema, MachineUpdateRequestSchema
+from src.schema.machine_schema import MachineResponseSchema, MachineUpdateRequestSchema, MachineStatusUpdateRequestSchema
 from sqlalchemy.orm import Session
 from src.dependencies.get_current_user_dependency import get_current_user
 from src.dependencies.postgres_dependency import get_db
-from src.services.machine.update_machine_service import update_machine_service
+from src.services.machine.update_machine_service import update_machine_service, update_machine_status_service
 
 
 
@@ -24,5 +24,19 @@ def update_machine(
         serial_number=request.serial_number,
         description=request.description,
         user_id=current_user.id
+    )
+    return machine
+
+
+@router.put("/update-status/{machine_id}", response_model=MachineResponseSchema)
+def update_machine_status(
+    machine_id: int,
+    request: MachineStatusUpdateRequestSchema,
+    db: Session = Depends(get_db),
+):
+    machine = update_machine_status_service(
+        db=db,
+        machine_id=machine_id,
+        status=request.status,
     )
     return machine
