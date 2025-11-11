@@ -8,6 +8,7 @@ from src.exceptions.shifts_exceptions import *
 from src.exceptions.user_exceptions import *
 from src.exceptions.token_exceptions import *
 from src.exceptions.string_exceptions import *
+from src.exceptions.tsdb_exceptions import *
 
 
 def register_exception_handlers(app):
@@ -80,7 +81,17 @@ def register_exception_handlers(app):
         InvalidTokenError: status.HTTP_401_UNAUTHORIZED,
 
         # ========== MACHINE ==========
-        InvalidStringError: status.HTTP_400_BAD_REQUEST
+        InvalidStringError: status.HTTP_400_BAD_REQUEST,
+
+        # ========== TSDB & Metrics errors ==========
+        MetricsError: status.HTTP_400_BAD_REQUEST,
+        EmptyMetricsError: status.HTTP_400_BAD_REQUEST,
+        MetricsValidationError: status.HTTP_422_UNPROCESSABLE_ENTITY,
+
+        TSDBError: status.HTTP_500_INTERNAL_SERVER_ERROR,
+        TSDBConnectionError: status.HTTP_503_SERVICE_UNAVAILABLE,
+        TSDBWriteError: status.HTTP_500_INTERNAL_SERVER_ERROR,
+
     }
 
     # Register each exception → response handler

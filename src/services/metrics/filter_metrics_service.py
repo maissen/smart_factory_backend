@@ -10,7 +10,7 @@ from src.core.settings import settings
 
 def filter_metrics_service(
     db: Session,
-    data: MetricsRequest, 
+    metrics: MetricsRequest, 
 ):
 
     all_users = get_all_users_service(db=db, role=settings.USER_ALLOWED_ROLES[1])
@@ -32,7 +32,7 @@ def filter_metrics_service(
         #   1) Machine belongs to the factory
         #   2) Metric timestamp inside shift hours
         filtered_metrics = [
-            metric for metric in data.metrics
+            metric for metric in metrics.metrics
             if metric.machine_id in factory_machine_ids
             and is_within_shift(metric.timestamp, shift.start_time, shift.end_time)
         ]
@@ -40,7 +40,7 @@ def filter_metrics_service(
         # insert the metrics
         if filtered_metrics:
             filtered_request = MetricsRequest(
-                timestamp=data.timestamp,
+                timestamp=metrics.timestamp,
                 metrics=filtered_metrics
             )
 
